@@ -1,0 +1,36 @@
+#server
+server:
+  port: 85
+  tomcat:
+    max-threads: 1000
+  servlet:
+    context-path: /
+    
+#spring datasource
+spring:
+  resources:
+    #前端静态资源路径
+    static-locations: classpath:/static/
+  datasource:
+    url: jdbc:mysql:///enterprise?serverTimezone=GMT%2B8&characterEncoding=utf8
+    username: root
+    password: root
+  thymeleaf:
+    prefix: classpath:/static/
+    suffix: .html
+    #使用jdk代理aop
+#  aop:
+    proxy-target-class: false    
+    
+#mybatis
+mybatis:
+  configuration:
+    default-statement-timeout: 30
+    map-underscore-to-camel-case: true
+  mapper-locations:
+  - classpath:/mapper/sys/*.xml
+  
+#log
+logging:
+  level:
+    com.qxn: DEBUG

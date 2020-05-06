@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxn.pj.sys.dao.LogsDao">
+
+	<select id="getRowCount" resultType="int">
+		select count(*) from logs
+		<include refid="queryByName"/>
+	</select>
+	
+	<select id="findPageObjects"
+		resultType="com.qxn.pj.sys.entity.Logs">
+		select * from logs
+		<include refid="queryByName"/>
+		order by createdTime desc
+		limit #{startIndex},#{pageSize}
+	</select>
+	
+	<!-- sql标签用于定义共性， 用include指令调用 -->
+	<sql id="queryByName">
+		<where>
+			<if test="username!=null and username!=''">
+				username like concat("%",#{username},"%")
+			</if>
+		</where>
+	</sql>
+	
+	<delete id="deleteObjects">
+		delete from logs
+		<where>
+			<foreach collection="ids" item="item">
+				or id=#{item}
+			</foreach>
+		</where>
+	</delete>
+	
+	<insert id="insertLog">
+		insert into logs (username,operation,method,
+		params,operationTime,ip,createdTime) 
+		values(#{username},#{operation},#{method},
+		#{params},#{operationTime},#{ip},#{createdTime})
+	</insert>
+</mapper>

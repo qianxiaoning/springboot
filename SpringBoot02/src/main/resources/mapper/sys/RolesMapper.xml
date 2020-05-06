@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxn.pj.sys.dao.RolesDao">
+	
+	<select id="getRowCount" resultType="int">
+		select count(*) from roles 
+		<include refid="queryByName"></include>
+	</select>
+	
+	<select id="findPageObjects" resultType="com.qxn.pj.sys.entity.Roles">
+		select * from roles 
+		<include refid="queryByName"></include>
+		order by createdTime desc 
+		limit #{startIndex},#{pageSize}
+	</select>
+	
+	<sql id="queryByName">
+		<where>
+			<if test="name!=null and name!=''">
+				name like concat("%",#{name},"%")
+			</if>
+		</where>
+	</sql>
+
+	<!-- 1.id是数据库自增形成的 -->
+	<!--useGeneratedKeys="true"使用insert的主键值 -->
+	<!--keyProperty表示将获取的主键值赋值给Roles实体类中的id属性，
+	通过setId方法  -->
+	<insert id="insertObject" 
+	parameterType="com.qxn.pj.sys.entity.Roles" 
+	useGeneratedKeys="true" 
+	keyProperty="id">
+		insert into roles values(null,#{name},
+		#{note},now(),now(),
+		#{createdUser},#{modifiedUser})
+	</insert>
+	<!-- 上面是下面的简化形式 -->	
+	<!-- <insert id="insertObject" 
+	parameterType="com.qxn.pj.sys.entity.Roles">		
+		<selectKey keyProperty="id" resultType="int" 
+		order="AFTER">
+			select last_insert_id();
+		</selectKey>
+		insert into Roles values(null,#{name},
+		#{note},now(),now(),
+		#{createdUser},#{modifiedUser})
+	</insert> -->
+	<!-- 2.id是业务层生成的 -->
+	<!-- 业务层直接传入dao就行了 -->
+	<!-- 3.id是dao层生成的 -->
+	<!-- <insert id="insertObject" 
+	parameterType="com.qxn.pj.sys.entity.Roles">
+		order="BEFORE"：
+		selectKey操作在insert操作之前
+		selectKey获取值赋值到entity.Roles的id属性上
+		<selectKey keyProperty="id" resultType="int" 
+		order="BEFORE">
+			select floor(rand()*1000000)
+		</selectKey>
+		insert into Roles values(#{id},#{name},
+		#{note},now(),now(),
+		#{createdUser},#{modifiedUser})
+	</insert> -->	
+	<update id="updateObject" 
+	parameterType="com.qxn.pj.sys.entity.Roles">		
+		update roles set name=#{name},note=#{note},
+		modifiedTime=now(),modifiedUser=#{modifiedUser} 
+		where id=#{id};
+	</update>	
+	<!-- 用resultMap：用于自定义映射，和关联查询。
+	将查询的Roles对象，
+	放入rolesMenus方法代表的RolesMenus对象中 -->
+	<select id="findRolesMenusByRolesId" 
+	resultMap="rolesMenus">
+		select * from roles where id=#{id}
+	</select>	
+	<!-- map类型是RolesMenus -->
+	<resultMap type="com.qxn.pj.sys.vo.RolesMenus" 
+	id="rolesMenus">
+		<!-- 自定义映射用法：
+		property:java对象的属性，column表中的列名 -->
+		<!-- 将查询到的id,name,note映射到roles实体对应的属性中 -->
+		<id property="roles.id" column="id"/>
+		<result property="roles.name" column="name"/>
+		<result property="roles.note" column="note"/>
+		<!-- 关联查询用法：像现在一个rolesId对应多个menusIds，
+		一对多用collection标签 -->
+		<!-- 1.column="id"，roles表中的id列 ，供使用的参数-->
+		<!-- 2.property="menusIds"，
+		查询结果存到RolesMenus的menusIds属性上 -->
+		<!-- 3.select="com.qxn.pj.sys.dao.RolesMenusDao.findMenusIdsByRolesId"，
+		通过命名空间调用RolesMenusDao中的方法 -->
+		<collection property="menusIds" 
+		select="com.qxn.pj.sys.dao.RolesMenusDao.findMenusIdsByRolesId" 
+		column="id"></collection>
+	</resultMap>
+</mapper>

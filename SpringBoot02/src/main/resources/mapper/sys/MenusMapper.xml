@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxn.pj.sys.dao.MenusDao">
+	<!-- #{name}调用的是entity.Menus中的get方法 -->
+	<insert id="insertObject" 
+	parameterType="com.qxn.pj.sys.entity.Menus">
+		insert into menus
+          (name,url,type,sort,note,parentId,permission,
+            createdTime,modifiedTime,createdUser,modifiedUser)
+          values
+          (#{name},#{url},#{type},#{sort},#{note},#{parentId},#{permission},
+          now(),now(),#{createdUser},#{modifiedUser})
+	</insert>
+	<update id="updateObject" 
+	parameterType="com.qxn.pj.sys.entity.Menus">
+		update menus set name=#{name},url=#{url},
+		type=#{type},sort=#{sort},note=#{note},
+		parentId=#{parentId},
+		permission=#{permission},
+		modifiedTime=now(),
+		modifiedUser=#{modifiedUser} where 
+		id=#{id};	
+	</update>
+</mapper>

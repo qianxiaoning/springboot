@@ -1,0 +1,8 @@
+.rootWrap{height:100%;}
+.rootWrap .btns span{
+	border:1px solid #000;cursor:pointer;
+	margin:0 30px;
+}
+.rootWrap .pages{
+	border:1px solid #000;margin:10px;
+}
