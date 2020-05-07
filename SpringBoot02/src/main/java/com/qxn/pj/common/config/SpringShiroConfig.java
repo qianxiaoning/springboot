@@ -28,7 +28,8 @@ public class SpringShiroConfig {
 		ShiroFilterFactoryBean fBean = new ShiroFilterFactoryBean();
 		//注入setSecurityManager
 		fBean.setSecurityManager(securityManager);
-		//设置登录url
+		/*设置登录url，setLoginUrl是redirect操作，基于安全考虑，Response Header的信息会被清除,导致跨域
+		 * */
 		fBean.setLoginUrl("/doLogin");
 		//设置过滤规则
 		//下面map用，LinkedHashMap，保证key的添加顺序
