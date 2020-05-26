@@ -23,9 +23,12 @@ public class JsonResult implements Serializable{
 	public JsonResult(Object data) {
 		this.data = data;
 	}
-	public JsonResult(Throwable e) {
-		this.message=e.getMessage();
-		this.code = 403;
+	public JsonResult(int code,String messaeg) {
+		this.code = code;
+		this.message = messaeg;
 	}
-	
+	public JsonResult(Throwable e) {
+		this.code = 403;
+		this.message=e.getMessage();
+	}
 }

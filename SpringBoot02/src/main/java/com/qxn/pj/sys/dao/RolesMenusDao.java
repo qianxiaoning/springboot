@@ -21,6 +21,9 @@ public interface RolesMenusDao {
 	@Select("select distinct menus_id from roles_menus where roles_id=#{rolesId}")
 	Integer[] selectMenusIdsByRoleId(
 			Integer rolesId);
+	//基于多个角色id获取菜单id
+	List<Integer> selectMenusIdsByRoleIds(
+			@Param("rolesIds")Integer[] rolesIds);
 	@Delete("delete from roles_menus where roles_id=#{rolesId}")
 	int deleteObjects(Integer rolesId);
 }

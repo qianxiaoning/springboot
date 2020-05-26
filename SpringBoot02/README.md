@@ -18,6 +18,7 @@
 =>ServiceException异常类=>LogsServiceTests
 =>JsonResult=>LogsController=>GlobalExceptionHandler
 =>frontEnd
+7.1开启nginx反向代理，跨域
 8.menus菜单表，roles角色表，roles_menus角色菜单关联表
 9.删菜单数据之前，有子菜单不允许删除，
 删除前先把角色菜单关系表中相应菜单id的数据全删了
@@ -203,24 +204,28 @@ UsersServiceImpl.findPageObject查用户列表
 业务层缓存，第二次执行findPageObject方法查用户列表，
 直接从业务层缓存中取：
 在启动类上加上@EnableCaching，
-在方法上加@Cacheable
+在方法上加@Cacheable(value = "usersCacheAll")
 方法的返回值存储到cache中，默认key为方法实际参数的组合
 
 @Cacheable属性：
 value:cache对象名称
 
-更新数据时，同时也要更新缓存，防止查到旧数据
-更新usersCache缓存对象中userDeptRoleIds.id的值，
-方法返回值得 与 查方法返回值一直
-@CachePut(value = "usersCache",
-key = "#userDeptRoleIds.id")
+更新数据时，同时也要更新缓存，防止查到旧数据，有两种方法
+1.更新缓存@CachePut
+@CachePut(value = "usersCacheById",...)
+将查到的返回值记录到缓存中，方法返回值得 与 缓存方法返回值一致
 
-使指定id的cache失效，
-beforeInvocation = false默认更新成功后再清缓存
-@CacheEvict(value = "usersCache",
-		key = "#userDeptRoleIds.id",
-		beforeInvocation = true)
-allEntries = true，cache全清		
+2.清除缓存@CacheEvict
+@CacheEvict(value = "usersCacheAll",...)
+
+//selectById时，用指定key清除缓存
+@CacheEvict(value = "usersCacheById",
+		key = "#userDeptRoleIds.id")
+		
+//selectAll时，用allEntries = true清除value中所有缓存，
+@CacheEvict(value = "usersCacheAll",
+		allEntries = true)		
+beforeInvocation = false默认更新成功后，再清除缓存
 
 28.shiro apache推出的安全框架，认证，授权
 原理：客户端向服务端请求=>过滤器
@@ -261,4 +266,373 @@ com.qxn.pj.common.config.SpringShiroConfig配置类
 将ShiroFilterFactoryBean注入到
 spring的FilterRegistrationBean中
 完成shiro的初始化操作
+
+认证失败调用，返回登录页方法
+fBean.setLoginUrl("/users/returnToLogin");
+返回给前端登录失效json，前端控制路由跳回登录页
+
+浏览器第一次请求，服务器会set-cookie:jsessionId到浏览器，
+服务器发现浏览器没带jsessionId这个cookie，会再生成一个set给浏览器
+
+每次请求都会对比jsessionId，不一致会跳回登录页
+
+现在springboot内置了FilterRegistrationBean这个对象，
+SpringWebConfig这个类可以不要了，
+
+用actuator查看系统底层是否注册这个bean:
+1.依赖spring-boot-starter-actuator
+2.application.yml配置加actuator配置
+3.点boot dashboard中的项目，再点击
+window-show view-other-properties打开视图
+在beans中搜索bean名称
+
+认证操作：
+UsersController=>
+subject.login(token)，token封装的username和password
+=>提交给Security Manager的子类DefaultWebSecurityManager
+=>找Realm，通过Realm访问数据库=>写ShiroUserRealm实现Realm接口
+=>把ShiroUserRealm实现Realm注入到DefaultWebSecurityManager
+=>此时DefaultWebSecurityManager有了用户提交的信息，和数据库取的信息
+=>将信息传给authenticate()验证
+
+可以把ShiroUserRealm看成一个普通的service，调UsersDao
+
+实例：
+1.写UsersDao方法，基于用户名查到用户对象
+2.写realm.ShiroUserRealm继承AuthorizingRealm
+3.控制层UsersController.doLogin(@RequestBody Users user)
+4.登录成功，前端路由跳转
+
+退出登录：
+1.在SpringShiroConfig.ShiroFilterFactoryBean中添加
+cMap.put("/users/returnToLogin","logout");
+2.前端调"/users/doLoginOut"接口，后台匹配到会自动执行"logout"操作，
+调用fBean.setLoginUrl("/users/returnToLogin");方法
+
+登录错误的统一异常处理：
+com.qxn.pj.common.web.GlobalExceptionHandler
+
+授权：
+shiro授权标识格式："sys:user:valid"
+"一级菜单名称:二级菜单名称:三级菜单名称"
+1.UsersServiceImpl.updateValidByUserId上
+加@RequiresPermissions("sys:user:valid")
+告诉shiro授权检测，访问方法需要"sys:user:valid"权限
+	1."sys:user:valid"提交给shiro框架
+	2.基于用户找到用户的权限信息
+	
+LogsServiceImpl.deleteObjects上也
+@RequiresPermissions("sys:log:delete")
+
+在Security Manager中的Authorizer对用户的权限信息进行检测
+当方法上加了@RequiresPermissions注解时检测
+aop实现
+
+2.SpringShiroConfig中追加：
+生命周期LifecycleBeanPostProcessor，
+代理对象创建器DefaultAdvisorAutoProxyCreator，
+配置Advisor对象，AuthorizationAttributeSourceAdvisor
+3.dao实现
+UserdRolesDao.findRoleIdsByUsersId()
+RolesMenusDao.selectMenusIdsByRoleIds()
+MenusDao.findPermissionsByMenuIds()
+
+Mapper.xml实现
+RolesMenusMapper.selectMenusIdsByRoleIds
+MenusMapper.findPermissionsByMenuIds()
+
+4.在ShiroUserRealm.AuthorizationInfo中调用dao
+查出permissions List<String>
+注入权限
+return new SimpleAuthorizationInfo()
+.setStringPermissions(permissionsSet);
+
+比如在运行
+@RequiresPermissions("sys:log:delete")
+LogsServiceImpl.deleteObjects()方法时，
+就会比对当前用户的Permissions中是否包含"sys:log:delete"
+
+29.前端=>后台流程：
+浏览器=>filterChain(过滤规则，SpringShiroConfig)=>
+DispatcherServlet(spring的)=>interceptor chain(拦截器)
+=>Handler(controller)
+
+30.shiro缓存配置
+授权操作时，每次都会查询数据库的用户权限信息，
+可以将第一次查询的用户权限信息进行缓存，以后登录授权时从缓存中读取
+
+SpringShiroConfig中
+1.添加shiro缓存管理器对象，cacheManager，
+对用户权限信息进行缓存操作
+2.将缓存管理器注入securityManager对象
+
+后面再进行登录时，
+就不会执行ShiroUserRealm.doGetAuthorizationInfo方法了，
+从业务层设置了缓存
+
+31.shiro rememberMe
+用户请求doLogin时，通过认证后，
+服务端把加密用户信息加密成的rememberMe这个cookie给浏览器，
+Set-Cookie存在浏览器的请求的域名下，关闭浏览器，下次请求时，浏览器会带上rememberMe，
+服务端拿到rememberMe这个cookie，能直接访问user匹配的路由，不会比对jsession值
+
+前端：
+登录时提交，用户名、密码、isRemember值
+
+后台：
+1.在UsersServiceImpl.doLogin中，设置token的
+如果isRemember=true;
+UsernamePasswordToken token = 
+new UsernamePasswordToken();
+token.setRememberMe(true);
+
+2.SpringShiroConfig中
+添加cookieRememberMeManager
+将cookieRememberMeManager注入securityManager
+
+3.修改shiro的过滤级别
+shiroFilterFactoryBean中
+cMap.put("/**", "authc");改为
+cMap.put("/**", "user");
+
+chrome查看cookie
+chrome://settings/siteData
+"rememberMe"中是用户信息subject对象的加密
+
+32.shiro会话时长配置
+shiro用户认证之后，会将用户信息写入服务端session中，默认时长为30分钟，
+自定义配置：
+SpringShiroConfig中
+1.添加session管理器对象
+SpringShiroConfig.sessionManager
+2.将sessionManager注入securityManager
+
+33.从session中获取用户信息
+1.登录时填入用户名，密码封装成UsernamePasswordToken，
+传入Subject.login(token)
+2.Subject.login会调用ShiroUserRealm.doGetAuthenticationInfo认证方法，
+doGetAuthenticationInfo方法里，将传入的token取出用户名，
+根据用户名查users表的user po对象，放入SimpleAuthenticationInfo对象中
+3.在session有效期中，通过SecurityUtils.getSubject().getPrincipal()，
+能取出登录的user po对象，使用
+场景：
+4.动态用户禁用启用修改对象
+UsersController.updateValidByUserId中取出user.getUsername()，
+users.setModifiedUser(user.getUsername());
+5.动态日志用户名LogsAspect.insertLog中，
+new Logs().setUsername()
+6.//获取整个session对象
+SecurityUtils.getSubject().getSession()
+7.将(Users)SecurityUtils.getSubject().getPrincipal();提取出去
+com.qxn.pj.common.util.ShiroUtils.getUser()
+
+34.修改密码
+旧密码，新密码，密码确认
+1.验证：原密码不能为空，新密码不能为空，密码输入不一致
+//取登录的对象
+(Users)SecurityUtils.getSubject().getPrincipal();
+
+//数据库中的 加密密码 SimpleHash类型
+SimpleHash sh = new SimpleHash("md5", // algorithmName算法名称
+				originPassword, // source原密码
+				UUID.randomUUID().toString(), // salt盐值
+				1// iterations加密此数，可以对加密结果进行再加密
+				);
+2.密码对比
+输入的旧密码取登录用户的盐值加密后  和  登录用户的加密密码 对比，旧密码是否相同
+输入的新密码取登录用户的盐值加密后  和  登录用户的加密密码 对比，新密码和旧密码是否相同
+3.把新密码，新盐值，根据userId update入数据库
+
+35.获取登录用户信息
+UsersController.getLoginUser
+Users user = ShiroUtils.getUser();
+
+36.spring拦截器
+HandlerInterceptor接口
+preHandle//控制层方法执行前，返回值true,false代表拦截和放行
+postHandle//控制层方法执行后
+afterCompletion//视图解析完成后
+
+1.写拦截器TimeAccessInterceptor，时间访问拦截，什么条件下放行，什么条件下拦截
+
+2.SpringWebConfig实现WebMvcConfigurer接口
+addInterceptors方法，添加拦截器，设置拦截路径
+
+代码执行过程：
+Filters(过滤器)
+DispatcherServlet(前端控制器，本质是servlet)
+HandlerInterceptors(拦截器，拦截controller)
+Handler(后端controller)
+aop(aspect切面)
+service
+
+为什么不用filter和aop，用拦截器：
+filters用于共性问题，如对所有post请求进行编码处理
+HandlerInterceptors对某一个controller控制
+aop反射机制创建代理对象，性能低一些
+
+HandlerInterceptors是基于回调机制，比aop快
+
+数据层也有拦截器
+mybatis.Interceptor
+
+aop也有拦截器
+spring.MethodInterceptor
+
+shiro也有拦截器
+shiro.MethodInterceptor
+
+37.将同步写日志，改成异步写日志
+springboot @Async
+
+场景：
+@RequiredLog("查询菜单")//写日志
+MenusServiceImpl.findObjects(){
+	//查询菜单...
+}
+写日志和查询菜单是同步
+
+现在加大写日志的耗时操作，
+在LogsServiceImpl.insertLog中加入，
+Thread.sleep(10000);
+
+会发现写完日志前，无法执行查询菜单
+
+解决方案：
+1.将LogsAspect.insertLog中的
+logsService.insertLog(entity);放入一个新的线程
+new Thread() {
+	public void run() {
+		logsService.insertLog(entity);
+	}
+}.start();
+写日志和查菜单变成2个线程，线程名：
+findMenus.thread.name = http-nio-84-exec-2
+insertLog.thread.name = Thread-48
+
+缺陷：并发量小
+100万人访问menu路径，会创建100万个线程，内存溢出
+
+2.线程池，spring异步写
+1.@Async//加注解，用异步方式写日志，这边得没有返回值
+public void insertLog(){}
+
+2.@EnableAsync//启用spring中的异步配置
+public class SpringBoot02Application {}
+线程名：
+findMenus.thread.name = http-nio-84-exec-7
+insertLog.thread.name = task-1
+
+缺点：每次写日志都是一个新的线程，所以需要线程池
+
+可以在第三方库里加断点
+
+@Async默认池对象是ThreadPoolTaskExecutor.submit()
+//ThreadPoolTaskExecutor核心线程8个，小于8创建新线程，大于8任务放在队列中
+
+自定义池对象
+SpringAsyncConfig中
+1.重写AsyncConfigurer接口的getAsyncExecutor方法，
+用旧版的SimpleAsyncTaskExecutor
+线程名：
+findMenus.thread.name = http-nio-84-exec-6
+insertLog.thread.name = SimpleAsyncTaskExecutor-1
+
+2.重写AsyncConfigurer接口的getAsyncExecutor方法，
+用新版的ThreadPoolTaskExecutor
+@Async调用
+线程名：
+findMenus.thread.name = http-nio-84-exec-6
+新线程未设置线程名前缀
+insertLog.thread.name = ThreadPoolTaskExecutor-1
+新线程设置线程名前缀
+insertLog.thread.name = qxn-service-thread-1
+
+3.SpringThreadPoolConfig中
+不实现AsyncConfigurer接口，自定义方法asyncExecutor给spring管理
+@Async("asyncExecutor")调用
+线程名：
+findMenus.thread.name = http-nio-84-exec-6
+新线程未设置线程名前缀
+findMenus.thread.name = pool-1-thread-1
+新线程设置线程名前缀
+insertLog.thread.name = qxn-server-thread-name-1
+
+将SpringThreadPoolConfig的配置参数写到application.yml中
+
+1.SpringThreadPoolConfig中
+在属性上添加spring的@Value("${async-thread-pool.corePoolSize}")注解
+
+2.SpringThreadPoolConfig中
+@ConfigurationProperties("async-thread-pool")调用
+会调用SpringThreadPoolConfig属性中的set方法
+添加spring-boot-configuration-processor依赖
+添加lombok.@Setter注解
+
+@Async可以写在方法和类上
+
+当@Async有返回值时
+@Async
+public int insertLog(){
+	int rows = logsDao.insertLog(entity);
+	return rows;
+}
+直接返回会报错，因为这是一个异步操作，不知道何时能够结束
+
+得写成
+@Async
+public Future<Integer> insertLog(){
+	int rows = logsDao.insertLog(entity);
+	return new AsyncResult<Integer>(rows);
+}
+取值时写成：
+Future<Integer> insertLog = logsService.insertLog(entity);
+Integer rows = insertLog.get();
+
+38.多数据源配置
+例如将日志表放入另一个数据库中
+
+39.第三方缓存配置
+例如将业务层数据进行缓存
+
+40.项目运行分析
+请求=>filter过滤器=>DispatcherServlet(前端控制器)=>
+HandlerInterceptor(拦截器)=>Controller(后端控制器)=>...
+
+41.项目打包
+jar包（推荐）
+1.run as=>maven install
+2.show in=>system explorer=>target目录下，
+找到SpringBoot02-0.0.1-SNAPSHOT.jar
+3.运行，java -jar .\SpringBoot02-0.0.1-SNAPSHOT.jar
+4.服务就跑起来了
+
+war包
+1.建war包项目
+<packaging>war</packaging>
+2.不打包tomcat
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-tomcat</artifactId>
+	<scope>provided</scope>
+</dependency>
+3.修改启动类，继承SpringBootServletInitializer
+@SpringBootApplication
+public class SpringBoot02Application extends 
+SpringBootServletInitializer{
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBoot02Application.class, args);
+	}
+	@Override
+	protected SpringApplicationBuilder configure(
+	SpringApplicationBuilder builder){
+		builder.sources(SpringBoot02Application.class)
+	}
+}
+4.打包run as=>maven install
+5.show in=>system explorer=>target目录下，
+找到SpringBoot02-0.0.1-SNAPSHOT.war
+6.将SpringBoot02-0.0.1-SNAPSHOT.war复制到，tomcat/webapps/下，
+启动/bin/startup.bat运行
+7.访问路径为localhost:端口号/项目名称
 ```

@@ -32,6 +32,9 @@ public class MenusServiceImpl implements MenusService{
 	@Transactional(readOnly = true)
 	@Override
 	public List<Map<String, Object>> findObjects() {
+		//看当前线程名称
+		String tName = Thread.currentThread().getName();
+		System.out.println("findMenus.thread.name = " + tName);
 		List<Map<String, Object>> list = menusDao.findObjects();
 		if(list.size()==0)
 			throw new ServiceException("no records");

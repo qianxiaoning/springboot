@@ -1,5 +1,7 @@
 package com.qxn.pj.sys.service;
 
+import java.util.concurrent.Future;
+
 import com.qxn.pj.common.vo.PageObject;
 import com.qxn.pj.sys.entity.Logs;
 
@@ -9,5 +11,6 @@ public interface LogsService {
 			String username,
 			Integer pageCurrent);
 	int deleteObjects(Integer ...ids);
-	int insertLog(Logs entity);
+//	void insertLog(Logs entity);
+	Future<Integer> insertLog(Logs entity);
 }

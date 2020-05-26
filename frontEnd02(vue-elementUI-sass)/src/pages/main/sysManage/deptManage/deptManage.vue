@@ -56,7 +56,7 @@
                 <tbody>                                   
                     <tr v-for="(item,index) in deptsData" :key="item.id" v-show="item.isShow">
                         <td>
-                            <input type="radio" name='id' :value='item.id' v-model="deptId" @click="chooseDeptItemData=item">
+                              <input autocomplete="on" type="radio" name='id' :value='item.id' v-model="deptId" @click="chooseDeptItemData=item">
                         </td>
                         <td>{{item.id}}</td>
                         <td :style="{paddingLeft: 20*item.level + 'px'}">
@@ -217,6 +217,7 @@ export default {
             // console.log(this.deptsData);
             const oldArray = JSON.parse(JSON.stringify(this.deptsData));
             console.log(oldArray);
+            if(!oldArray)return;
             oldArray.forEach((item1)=>{
                 //添加hasNode属性
                 oldArray.forEach((item2)=>{

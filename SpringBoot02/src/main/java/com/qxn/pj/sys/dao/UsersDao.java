@@ -23,8 +23,12 @@ public interface UsersDao {
 	int getRowCount(String username);
 
 	List<UserDeptRoleIds> findPageObjects(String username, int startIndex, int pageSize);
-	@Update("update users set valid=#{valid},modifiedTime=#{modifiedTime} where id=#{id}")
+	@Update("update users set valid=#{valid},modifiedTime=now(),modifiedUser=#{modifiedUser} where id=#{id}")
 	int updateValidByUserId(Users users);
 
 	int updateInfo(UserDeptRoleIds userDeptRoleIds);
+	@Select("select * from users where username=#{username}")
+	Users findUsersByUserName(String username);
+	
+	int editPassword(Users user);
 }

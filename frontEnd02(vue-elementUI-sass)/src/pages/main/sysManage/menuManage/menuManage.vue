@@ -66,7 +66,7 @@
                 <tbody>                                   
                     <tr v-for="(item,index) in menusData" :key="item.id" v-show="item.isShow">
                         <td>
-                            <input type="radio" name='id' :value='item.id' v-model="menuId" @click="chooseMenuItemData=item">
+                              <input autocomplete="on" type="radio" name='id' :value='item.id' v-model="menuId" @click="chooseMenuItemData=item">
                         </td>
                         <td :style="{paddingLeft: 20*item.level + 'px'}">
                             <span class="expand" v-if="item.hasNode" @click="recycleToggleNode(item,menusData[index+1].isShow)">>></span>
@@ -232,6 +232,7 @@ export default {
             // console.log(this.menusData);
             const oldArray = JSON.parse(JSON.stringify(this.menusData));
             // console.log(this.menusData);
+            if(!oldArray)return;
             oldArray.forEach((item1)=>{
                 //添加hasNode属性
                 oldArray.forEach((item2)=>{

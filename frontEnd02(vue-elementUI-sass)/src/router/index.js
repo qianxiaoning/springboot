@@ -20,7 +20,7 @@ const router = new Router({
   routes: [
     {
       path: '/',      
-      redirect: '/main'
+      redirect: '/login'
     },
     {
       path: '/login',   
@@ -29,7 +29,7 @@ const router = new Router({
     },    
     {
       path: '/main',      
-      name:'name',
+      name:'main',
       component: main,
       redirect:'/main/sysManage',
       children:[        

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.qxn.pj.sys.entity.Menus;
@@ -27,4 +28,8 @@ public interface MenusDao {
 			+ "on c.parentId=p.id")
 	List<Map<String,Object>> findObjects();
 	int updateObject(Menus entity);
+	/*基于菜单ids获取权限标识
+	 * */
+	List<String> findPermissionsByMenuIds(
+			@Param("menuIds")Integer[] menuIds);
 }

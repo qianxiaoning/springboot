@@ -3,7 +3,9 @@ package com.qxn.pj.common.aspect;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.Future;
 
+import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.qxn.pj.common.annotation.RequiredLog;
 import com.qxn.pj.common.util.IPUtils;
+import com.qxn.pj.common.util.ShiroUtils;
 import com.qxn.pj.sys.entity.Logs;
 import com.qxn.pj.sys.entity.Users;
 import com.qxn.pj.sys.service.LogsService;
@@ -106,17 +109,28 @@ public class LogsAspect {
 				targetMethodParams = ((Users)jp.getArgs()[0]).toStringValues();
 			}
 		}
+//		Users user = (Users)SecurityUtils.getSubject().getPrincipal();
+		Users user = ShiroUtils.getUser();
 		//2.封装用户行为日志（Logs）
 		Logs entity = new Logs();
 		entity.setIp(IPUtils.getIpAddr());
-		entity.setUsername("admin");		
+		entity.setUsername(user.getUsername());		
 		entity.setOperation(operation);
 		entity.setMethod(targetObjectMethodName);
 		entity.setParams(targetMethodParams);
 		entity.setOperationTime(time);
 		entity.setCreatedTime(new Date());
 		//3.调用service方法insertLog将日志写入到数据库
-		logsService.insertLog(entity);
+//		logsService.insertLog(entity);
+		
+//		new Thread() {
+//			public void run() {
+//				logsService.insertLog(entity);
+//			}
+//		}.start();
+		
+		Future<Integer> insertLog = logsService.insertLog(entity);
+		Integer integer = insertLog.get();
 	}
 	
 }

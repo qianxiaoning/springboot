@@ -3,7 +3,7 @@
         <div class="head flex jc-sb">
             <span>日志管理</span>
             <div class="right">
-                <input type="text" v-model="username" placeholder="用户名">
+                  <input autocomplete="on" type="text" v-model="username" placeholder="用户名">
                 <span @click="getLogs(username,1)">搜索</span>
                 <span @click="deleteLogsAction()">删除</span>
             </div>
@@ -24,7 +24,7 @@
                 <tbody>
                     <tr v-for="(item) in logsData.records" :key="item.id">
                         <td>
-                            <input type="checkbox" :id="item.id" v-model="idsCheckbox" :value="item.id">
+                              <input autocomplete="on" type="checkbox" :id="item.id" v-model="idsCheckbox" :value="item.id">
                         </td>
                         <td>{{item.username}}</td>
                         <td>{{item.operation}}</td>
@@ -60,6 +60,7 @@ export default {
     },
     mounted(){
         this.getLogs(this.username,this.pageCurrent);
+        console.log(document.cookie);
     },
     components:{
     },
@@ -67,6 +68,7 @@ export default {
         async getLogs(username,pageCurrent){
             const res = await this.$http.get(this.$urls.getLogs,{username:username,pageCurrent:pageCurrent});
             console.log(res);
+            if(!res.data)return;
             this.logsData = res.data;
             this.pageCurrent = this.logsData.pageCurrent;
         },

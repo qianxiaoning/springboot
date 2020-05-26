@@ -16,7 +16,7 @@ public class LogsServiceTests {
 	private LogsService logsService;
 	@Test
 	public void testFindPageObjects() {
-		PageObject<Logs> po = logsService.findPageObject("sasa", 1);
+		PageObject<Logs> po = logsService.findPageObject("admin", 1);
 		System.out.println(po);
 	}
 }

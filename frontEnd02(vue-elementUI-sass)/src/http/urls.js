@@ -1,5 +1,5 @@
-const host_dev = 'api';
-const host_prod = 'http://a.cloud.cn/api';
+const host_dev = '/api';
+const host_prod = 'http://a.cloud.cn/api/';
 // 根据 process.env.NODE_ENV 判断 开发或生产接口地址
 const host = process.env.NODE_ENV == 'development' ? host_dev : host_prod; 
 
@@ -56,6 +56,14 @@ const urls = {
     updateValidByUserId:host+'/users/updateValidByUserId',
     //根据userId修改UserDeptRoleIds
     updateUserDeptRoleIdsById:host+'/users/updateUserDeptRoleIdsById',
+    //登录
+    login:host+'/users/doLogin',
+    //退出登录
+    logout:host+'/users/doLoginOut',
+    //修改密码
+    editPassword:host+'/users/editPassword',
+    //获取登录用户信息
+    getLoginUser:host+'/users/getLoginUser',
 }
 
 export default urls;

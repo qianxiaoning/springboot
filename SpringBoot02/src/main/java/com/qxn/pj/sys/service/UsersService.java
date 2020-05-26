@@ -1,6 +1,8 @@
 package com.qxn.pj.sys.service;
 import com.qxn.pj.common.vo.PageObject;
 import com.qxn.pj.sys.entity.Users;
+import com.qxn.pj.sys.vo.EditPassword;
+import com.qxn.pj.sys.vo.LoginVo;
 import com.qxn.pj.sys.vo.UserDeptRoleIds;
 import com.qxn.pj.sys.vo.UserDeptRolesPra;
 
@@ -17,5 +19,9 @@ public interface UsersService {
 	int updateValidByUserId(Users users);
 
 	int updateUserDeptRoleIdsById(UserDeptRoleIds userDeptRoleIds);
+
+	int editPassword(EditPassword editPassword);
+
+	void doLogin(LoginVo loginVo);
 
 }

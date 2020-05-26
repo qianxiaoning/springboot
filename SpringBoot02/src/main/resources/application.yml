@@ -21,7 +21,7 @@ spring:
 #    prefix: classpath:/templates/pages/
     suffix: .html
     #使用jdk代理aop
-#  aop:
+  aop:
     proxy-target-class: false    
     
 #mybatis
@@ -36,3 +36,19 @@ mybatis:
 logging:
   level:
     com.qxn: DEBUG
+    
+#spring actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        
+#spring async pool
+async-thread-pool:
+  corePoolSize: 5
+  maxPoolSize: 5
+  keepAliveSeconds: 600
+  queueCapacity: 5
+  
+    

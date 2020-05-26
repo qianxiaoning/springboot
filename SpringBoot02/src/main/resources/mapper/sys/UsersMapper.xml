@@ -3,6 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qxn.pj.sys.dao.UsersDao">
+	<update id="editPassword">
+		update users set password=#{password},
+		salt=#{salt},modifiedTime=now() where 
+		id=#{id}
+	</update>
 	<!-- mybatisAssociationPra练习 -->	
 	<select id="findUserDeptRolesById" 
 	resultMap="userDeptRolesPra">
@@ -41,10 +46,12 @@
 	
 	<insert id="insertUser" useGeneratedKeys="true" 
 	keyProperty="id">
-		insert into users (username,password,email,
-		mobile,valid,deptId,modifiedTime,modifiedUser) 
-		values(#{username},#{password},#{email},
-		#{mobile},#{valid},#{deptId},now(),#{modifiedUser})
+		insert into users (username,password,salt,
+		email,mobile,valid,deptId,createdTime,
+		modifiedTime,createdUser,modifiedUser) 
+		values(#{username},#{password},#{salt},
+		#{email},#{mobile},#{valid},#{deptId},now(),
+		now(),#{createdUser},#{modifiedUser})
 	</insert>
 	
 	<select id="getRowCount" resultType="int">

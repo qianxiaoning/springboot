@@ -14,7 +14,7 @@ let instanceAxios = axios.create({
         'Content-Type':'application/json;charset=UTF-8',
         // token:storejs("token")
     },
-    timeout:'2000',    
+    timeout:'20000',    
     // 跨域请求是否需要凭证 是否带上cookie
     withCredentials:true,
     // baseURL:url    
@@ -49,16 +49,24 @@ instanceAxios.interceptors.response.use(
     //loading停止
     loadingInstance.close();
     const res = response.data;
+    //请求正常
     if(res.code==200){
         return res;
     }
+    //登录失效
     else if(res.code==302){
         messageInstance = Message({
             message:'账号已掉线，请重新登录',
             type:'warning',
+            duration:1000,
+            onClose:()=>{
+                //重定向回登录页
+                window.location.replace("/");
+            }
         });
-        return Promise.reject(response);
+        return res;
     }    
+    //前端请求错误
     else if(res.code==403){
         messageInstance = Message({
             message:res.message,
@@ -66,13 +74,12 @@ instanceAxios.interceptors.response.use(
         });
         return Promise.reject(response);
     }    
-    
   },
   (error)=>{    
     console.log(error);
     //loading停止
     loadingInstance.close();
-    // 弹出错误
+    // 服务端问题
     messageInstance = Message({
         message:"系统维护中",
         // message:error,

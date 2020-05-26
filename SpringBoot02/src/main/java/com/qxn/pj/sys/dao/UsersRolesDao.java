@@ -1,5 +1,7 @@
 package com.qxn.pj.sys.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -12,7 +14,7 @@ public interface UsersRolesDao {
 	int deleteObjectByRoleId(Integer id);
 	//mybatisAssociationPra练习
 	@Select("select role_id from users_roles where user_id=#{id}")
-	Integer[] findRoleIdsByUsersId(Integer id);
+	List<Integer> findRoleIdsByUsersId(Integer id);
 	int insertRoles(UserDeptRoleIds userDeptRoleIds);
 	@Delete("delete from users_roles where user_id=#{usersId}")
 	int deleteObjectsByUserId(int usersId);

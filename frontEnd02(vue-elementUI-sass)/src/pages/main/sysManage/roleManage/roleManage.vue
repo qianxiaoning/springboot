@@ -13,7 +13,7 @@
                         <li v-for="(item,index) in menusData" :key="item.id" v-show="item.isShow">
                             <div :style="{paddingLeft: 30*item.level + 'px'}">
                                 <span class="expand" v-if="item.hasNode" @click="recycleToggleNode(item,menusData[index+1].isShow)">>></span>
-                                <input type="checkbox" v-model="roleForm.menusIds" :value="item.id" @change="changeMenu(item,index,$event)">
+                                  <input autocomplete="on" type="checkbox" v-model="roleForm.menusIds" :value="item.id" @change="changeMenu(item,index,$event)">
                                 <span>{{item.name}}</span>
                             </div>
                         </li>
@@ -28,7 +28,7 @@
         <div class="head flex jc-sb">
             <span>角色管理</span>
             <div class="right">
-                <input type="text" v-model="username" placeholder="角色名">
+                  <input autocomplete="on" type="text" v-model="username" placeholder="角色名">
                 <span @click="getRoles(username,1)">搜索</span>
                 <span @click="isPost=true;postRoleAction()">添加</span>
                 <!-- <span @click="deleteRolesAction()">删除</span> -->
@@ -241,7 +241,8 @@ export default {
         },
         async getRoles(username,pageCurrent){
             const res = await this.$http.get(this.$urls.getRoles,{name:username,pageCurrent:pageCurrent});
-            console.log(res);
+            // console.log(this.$options.data().rolesData);
+            if(!res.data)return;
             this.rolesData = res.data;
             this.pageCurrent = this.rolesData.pageCurrent;
         },
@@ -291,6 +292,7 @@ export default {
             // console.log(this.menusData);
             const oldArray = JSON.parse(JSON.stringify(this.menusData));
             // console.log(this.menusData);
+            if(!oldArray)return;
             oldArray.forEach((item1)=>{
                 //添加hasNode属性
                 oldArray.forEach((item2)=>{

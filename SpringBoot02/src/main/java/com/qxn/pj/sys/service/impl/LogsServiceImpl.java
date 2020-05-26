@@ -1,8 +1,12 @@
 package com.qxn.pj.sys.service.impl;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +43,7 @@ public class LogsServiceImpl implements LogsService{
 		//4.查询结果封装并返回
 		return new PageObject<>(pageCurrent, pageSize, rowCount, records);
 	}	
+	@RequiresPermissions("sys:log:delete")
 	@Override
 	public int deleteObjects(Integer ...ids) {
 		//校验，删除，返回
@@ -52,11 +57,30 @@ public class LogsServiceImpl implements LogsService{
 		}
 		return counts;
 	}
-	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public int insertLog(Logs entity) {
+//	@Async//加注解，用异步方式写日志，默认池对象是ThreadPoolTaskExecutor
+//	@Async//使用默认getAsyncExecutor方法
+	@Async("asyncExecutor")//自定义方法asyncExecutor
+	@Override
+//	public void insertLog(Logs entity) {
+//		//看当前线程名称
+//		String tName = Thread.currentThread().getName();
+//		System.out.println("insertLog.thread.name = " + tName);
+//		int rows = logsDao.insertLog(entity);
+//		try {
+//			Thread.sleep(10000);
+//		} catch (Exception e) {
+//		}
+//	}
+	public Future<Integer> insertLog(Logs entity) {
+		//看当前线程名称
+		String tName = Thread.currentThread().getName();
+		System.out.println("insertLog.thread.name = " + tName);
 		int rows = logsDao.insertLog(entity);
-		return rows;
+		try {
+			Thread.sleep(10000);
+		} catch (Exception e) {
+		}
+		return new AsyncResult<Integer>(rows);
 	}
-
 }

@@ -45,7 +45,7 @@
         <div class="head flex jc-sb">
             <span>用户管理</span>
             <div class="right">
-                <input type="text" v-model="username" placeholder="用户名">
+                  <input autocomplete="on" type="text" v-model="username" placeholder="用户名">
                 <span @click="getUsers(username,1)">搜索</span>
                 <span @click="isPost=true;postUserAction()">添加</span>
                 <span @click="isPost=false;putUsersAction()">修改</span>
@@ -69,7 +69,7 @@
                 <tbody>
                     <tr v-for="(item,index) in usersData.records" :key="item.id">
                         <td>
-                            <input type="radio" :id="item.id" v-model="userId" :value="item.id" @click="chooseUserItemIndex=index">
+                              <input autocomplete="on" type="radio" :id="item.id" v-model="userId" :value="item.id" @click="chooseUserItemIndex=index">
                         </td>
                         <td>{{item.username}}</td>
                         <td>{{item.depts&&item.depts.name}}</td>
@@ -268,6 +268,7 @@ export default {
         handleDeptsData(){
             const oldArray = JSON.parse(JSON.stringify(this.deptList));
             console.log(oldArray);
+            if(!oldArray)return;
             oldArray.forEach((item1)=>{
                 //添加hasNode属性
                 oldArray.forEach((item2)=>{
@@ -350,7 +351,7 @@ export default {
         },
         async editValid(id,valid){
             valid = valid === 0 ? 1 : 0;
-            const res = await this.$http.put(this.$urls.updateValidByUserId,{id:id,valid:valid,username:"admin"});
+            const res = await this.$http.put(this.$urls.updateValidByUserId,{id:id,valid:valid});
             Message({
                 message:res.message,
                 type:'success',
@@ -374,6 +375,7 @@ export default {
         async getUsers(username,pageCurrent){
             const res = await this.$http.get(this.$urls.getUsers,{username:username,pageCurrent:pageCurrent});
             console.log(res);
+            if(!res.data)return;
             this.usersData = res.data;
             this.pageCurrent = this.usersData.pageCurrent;
         },
