@@ -1,4 +1,4 @@
-### springboot02(springboot+actuator+devtools+lombok+nginx+aop+事务+缓存+shiro(加密，认证，授权，授权缓存，rememberMe，会话管理)+spring拦截器+springboot异步处理@Async（线程池）+vue)
+### springboot02(springboot+actuator+devtools+lombok+nginx+aop+@Transactional+@Cacheable+shiro(SimpleHash,AuthenticationInfo,AuthorizationInfo,CacheManager,rememberMe,SessionManager)+InterceptorRegistry+@Async(thread pool)+vue)
 #### 后台管理系统
 #### 配套前端frontEnd02(vue-elementUI-sass)
 ```
