@@ -1,7 +1,6 @@
-### springboot02
-#### 后台管理系统，springboot+shiro+aop+vue
+### springboot02(springboot+actuator+devtools+lombok+nginx+aop+事务+缓存+shiro(加密，认证，授权，授权缓存，rememberMe，会话管理)+spring拦截器+springboot异步处理@Async（线程池）+vue)
+#### 后台管理系统
 #### 配套前端frontEnd02(vue-elementUI-sass)
-springboot+nginx+actuator+devtools+lombok+vue
 ```
 概要：
 
@@ -49,7 +48,7 @@ useGeneratedKeys="true"获取insert的主键值，
 18.update roles_menus关系表时，先删再插入
 19.删的时候先删关系表，再删自身。插入修改的时候先改自身，再改关系表
 
-20.用shiro给密码加密，====
+20.用shiro给密码加密
 20.1 生成盐值 String salt = UUID.randomUUID().toString();
 20.2 用shiro的SimpleHash进行md5加密
 SimpleHash sh = new SimpleHash(
