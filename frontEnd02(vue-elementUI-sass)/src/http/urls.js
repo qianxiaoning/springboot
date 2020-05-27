@@ -63,7 +63,7 @@ const urls = {
     //修改密码
     editPassword:host+'/users/editPassword',
     //获取登录用户信息
-    getLoginUser:host+'/users/getLoginUser',
+    getLoginUser:host+'/users/getLoginUser'    
 }
 
 export default urls;

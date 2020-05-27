@@ -1,12 +1,9 @@
 package com.qxn.pj.sys.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qxn.pj.common.vo.JsonResult;
@@ -29,6 +26,5 @@ public class LogsController {
 			Integer ...ids) {
 		int counts = logsService.deleteObjects(ids);
 		return new JsonResult("删除成功");
-	}
-	
+	}	
 }

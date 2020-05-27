@@ -66,21 +66,21 @@ public class LogsServiceImpl implements LogsService{
 //		//看当前线程名称
 //		String tName = Thread.currentThread().getName();
 //		System.out.println("insertLog.thread.name = " + tName);
-//		int rows = logsDao.insertLog(entity);
 //		try {
 //			Thread.sleep(10000);
 //		} catch (Exception e) {
 //		}
+//		int rows = logsDao.insertLog(entity);
 //	}
 	public Future<Integer> insertLog(Logs entity) {
 		//看当前线程名称
 		String tName = Thread.currentThread().getName();
 		System.out.println("insertLog.thread.name = " + tName);
-		int rows = logsDao.insertLog(entity);
 		try {
 			Thread.sleep(10000);
 		} catch (Exception e) {
 		}
+		int rows = logsDao.insertLog(entity);
 		return new AsyncResult<Integer>(rows);
 	}
 }

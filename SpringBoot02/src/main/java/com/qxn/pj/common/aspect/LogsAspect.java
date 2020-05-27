@@ -100,7 +100,7 @@ public class LogsAspect {
 		//参数数组转字符串
 		String targetMethodParams = 
 				Arrays.toString(jp.getArgs());
-		Class clz;
+		Class<?> clz;
 		
 		if(jp.getArgs().length!=0) {
 			clz = jp.getArgs()[0].getClass();
@@ -129,8 +129,8 @@ public class LogsAspect {
 //			}
 //		}.start();
 		
-		Future<Integer> insertLog = logsService.insertLog(entity);
-		Integer integer = insertLog.get();
+		Future<Integer> insertLog = logsService.insertLog(entity);		
+//		Integer rows = insertLog.get();//需要取值的地方会被阻塞
 	}
 	
 }
