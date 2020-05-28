@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 public class Utils {
 	public static String testReflect(Object model) {
 		StringBuilder result = new StringBuilder("[");
-		Class Model = model.getClass();
+		Class<?> Model = model.getClass();
         for (Field declaredField : Model.getDeclaredFields()) {
             try {
                 result

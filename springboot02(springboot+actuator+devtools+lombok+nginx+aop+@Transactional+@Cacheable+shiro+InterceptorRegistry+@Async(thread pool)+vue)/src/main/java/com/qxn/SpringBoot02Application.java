@@ -9,9 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableCaching//启用spring中的cache
 @EnableAsync//启用spring中的异步配置
 public class SpringBoot02Application {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBoot02Application.class, args);
 	}
-
 }

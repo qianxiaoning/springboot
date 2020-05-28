@@ -36,6 +36,5 @@ public class TimeAccessInterceptor implements HandlerInterceptor {
 		}else {
 			return true;
 		}
-		
 	}
 }

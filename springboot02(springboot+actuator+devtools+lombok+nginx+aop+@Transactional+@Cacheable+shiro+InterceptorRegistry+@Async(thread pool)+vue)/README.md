@@ -3,6 +3,105 @@
 #### 配套前端frontEnd02(vue-elementUI-sass)
 ```
 概要：
+0.jsp页面，后台路由统一匹配方法
+PageController.java
+
+1.Users增加toStringValues方法
+Users.toStringValues
+
+1.自定义ServiceException异常类
+ServiceException.java
+
+1.GlobalExceptionHandler 全局异常类
+GlobalExceptionHandler.java
+
+2.nginx 反向代理
+IPUtils.java
+
+3.mapper.xml 数据映射，关联表查询
+自关联查询
+DeptsDao.findObjects
+共性提取和调用
+<include refid="queryByName"/>
+<sql id="queryByName">
+使用自增的主键
+<insert id="insertObject" useGeneratedKeys="true" keyProperty="id">
+自定义映射 resultMap
+collection => list,association => po
+例子1
+<resultMap type="com.qxn.pj.sys.vo.RolesMenus" id="rolesMenus">
+	<!-- 将查询到的id,name,note映射到RolesMenus.roles实体对应的属性中 -->
+	<id property="roles.id" column="id"/>
+	<result property="roles.name" column="name"/>
+	<result property="roles.note" column="note"/>
+	<!-- 将查询到的list映射到RolesMenus.menusIds"属性中 -->	
+	<collection property="menusIds" 
+	select="com.qxn.pj.sys.dao.RolesMenusDao.findMenusIdsByRolesId" 
+	column="id"></collection>
+</resultMap>
+例子2
+<resultMap type="com.qxn.pj.sys.vo.UserDeptRolesPra" id="userDeptRolesPra">
+	<!-- autoMapping="true"，自动映射对应字段 -->
+	<association property="users" autoMapping="true" javaType="com.qxn.pj.sys.entity.Users">
+		<!--类似于-->			
+		<!-- <id property="id" column="id"/>
+	    <result property="username" column="username"/>		    
+	    <result property="password" column="username"/>		    
+	    ... -->
+	</association>
+	<!-- =>depts -->
+	<association property="depts" column="deptId" 
+	select="com.qxn.pj.sys.dao.DeptsDao.selectDeptById"></association>
+	<!-- =>roleIds -->
+	<collection property="roleIds" 
+	select="com.qxn.pj.sys.dao.UsersRolesDao.findRoleIdsByUsersId" 
+	column="id"></collection>
+</resultMap>
+
+5.aop：添加日志
+RequiredLog.java
+LogsAspect.java
+@RequiredLog("查询菜单")
+@RequiredLog("禁用启用")
+@RequiredLog("修改用户")
+
+6.@Transactional springboot事务
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(readOnly = true)
+
+7.@Cacheable springboot缓存
+SpringBoot02Application.java
+@Cacheable(value = "usersCache")
+@CacheEvict(value = "usersCache", allEntries = true)
+@CachePut(value = "usersCache",key = "#userDeptRoleIds.id")
+
+8.shiro 密码加密，认证，授权，统一错误处理，缓存，会话管理，rememberMe
+密码加密
+new SimpleHash
+配置类
+SpringShiroConfig.java
+取session中用户信息
+ShiroUtils.java
+shiro异常处理
+GlobalExceptionHandler.java
+shiro realm
+ShiroUserRealm
+授权
+@RequiresPermissions("sys:log:delete")
+@RequiresPermissions("sys:user:valid")
+
+13.spring拦截器
+SpringWebConfig.java
+TimeAccessInterceptor.java
+
+14.springboot异步 @Async，线程池
+SpringBoot02Application.java
+SpringAsyncConfig.java
+SpringThreadPoolConfig.java
+@Async
+@Async("asyncExecutor")
+
+15.项目打包
 
 ```
 ---

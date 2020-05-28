@@ -10,7 +10,6 @@ import com.qxn.pj.sys.entity.Users;
 import com.qxn.pj.sys.vo.UserDeptRoleIds;
 import com.qxn.pj.sys.vo.UserDeptRolesPra;
 
-
 @Mapper
 public interface UsersDao {
 	//mybatisAssociationPra练习

@@ -23,5 +23,4 @@ public interface UsersService {
 	int editPassword(EditPassword editPassword);
 
 	void doLogin(LoginVo loginVo);
-
 }
