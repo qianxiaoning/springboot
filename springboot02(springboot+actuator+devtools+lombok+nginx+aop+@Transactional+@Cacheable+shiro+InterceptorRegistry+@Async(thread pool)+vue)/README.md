@@ -1,24 +1,25 @@
-### springboot02(springboot+actuator+devtools+lombok+nginx+aop+@Transactional+@Cacheable+shiro(SimpleHash,AuthenticationInfo,AuthorizationInfo,CacheManager,rememberMe,SessionManager)+InterceptorRegistry+@Async(thread pool)+vue)
+### springboot02(springboot+actuator+devtools+lombok+nginx+aop+@Transactional+@Cacheable+shiro(SimpleHash,AuthenticationInfo,AuthorizationInfo,CacheManager,CookieRememberMeManager,SessionManager)+InterceptorRegistry+@Async(thread pool)+vue)
 #### 后台管理系统
 #### 配套前端frontEnd02(vue-elementUI-sass)
 ```
 概要：
-0.jsp页面，后台路由统一匹配方法
-PageController.java
+1.jsp页面，后台路由统一匹配方法
+PageController.doModuleUI
 
-1.Users增加toStringValues方法
+2.Users增加toStringValues方法
 Users.toStringValues
 
-1.自定义ServiceException异常类
+3.自定义ServiceException异常类
 ServiceException.java
 
-1.GlobalExceptionHandler 全局异常类
+4.GlobalExceptionHandler 全局异常类
 GlobalExceptionHandler.java
 
-2.nginx 反向代理
+5.nginx 反向代理
 IPUtils.java
+nginx.conf
 
-3.mapper.xml 数据映射，关联表查询
+6.mapper.xml 数据映射，关联表查询
 自关联查询
 DeptsDao.findObjects
 共性提取和调用
@@ -58,51 +59,59 @@ collection => list,association => po
 	column="id"></collection>
 </resultMap>
 
-5.aop：添加日志
+7.aop：添加日志
 RequiredLog.java
 LogsAspect.java
 @RequiredLog("查询菜单")
 @RequiredLog("禁用启用")
 @RequiredLog("修改用户")
 
-6.@Transactional springboot事务
+8.@Transactional springboot事务
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @Transactional(readOnly = true)
 
-7.@Cacheable springboot缓存
+9.@Cacheable springboot缓存
 SpringBoot02Application.java
 @Cacheable(value = "usersCache")
 @CacheEvict(value = "usersCache", allEntries = true)
 @CachePut(value = "usersCache",key = "#userDeptRoleIds.id")
 
-8.shiro 密码加密，认证，授权，统一错误处理，缓存，会话管理，rememberMe
-密码加密
-new SimpleHash
+10.shiro 密码加密，认证，授权，shiro异常处理，授权信息缓存，会话管理，rememberMe
 配置类
 SpringShiroConfig.java
-取session中用户信息
-ShiroUtils.java
-shiro异常处理
-GlobalExceptionHandler.java
-shiro realm
-ShiroUserRealm
+密码加密
+new SimpleHash
+认证
+ShiroUserRealm.AuthenticationInfo
 授权
 @RequiresPermissions("sys:log:delete")
 @RequiresPermissions("sys:user:valid")
+ShiroUserRealm.AuthorizationInfo
+shiro异常处理
+GlobalExceptionHandler.java
+授权信息缓存
+CacheManager
+会话管理
+ShiroUtils.java
+SessionManager
+取session中用户信息
+rememberMe
+CookieRememberMeManager
 
-13.spring拦截器
+11.spring拦截器
 SpringWebConfig.java
 TimeAccessInterceptor.java
 
-14.springboot异步 @Async，线程池
+12.springboot异步 @Async，线程池
 SpringBoot02Application.java
 SpringAsyncConfig.java
 SpringThreadPoolConfig.java
 @Async
 @Async("asyncExecutor")
 
-15.项目打包
-
+13.项目打包
+打成jar包，
+运行java -jar .\xxx.jar
 ```
 ---
 ```
