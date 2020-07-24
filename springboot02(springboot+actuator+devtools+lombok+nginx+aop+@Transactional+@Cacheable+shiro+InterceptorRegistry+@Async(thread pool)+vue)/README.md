@@ -1,6 +1,6 @@
 ### springboot02(springboot+actuator+devtools+lombok+nginx+aop+@Transactional+@Cacheable+shiro(SimpleHash,AuthenticationInfo,AuthorizationInfo,CacheManager,CookieRememberMeManager,SessionManager)+InterceptorRegistry+@Async(thread pool)+vue)
 #### 后台管理系统
-#### 配套前端frontEnd02(vue-elementUI-sass)
+#### 配套前端springboot02_frontEnd(vue-elementUI-sass)
 ```
 概要：
 1.jsp页面，后台路由统一匹配方法

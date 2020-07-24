@@ -23,6 +23,12 @@ public class SpringbootMybatisPlusApplicationTests {
     private UpdateWrapper<User> updateWrapper;
 
     @Test
+    public void findAllUser() {
+        //条件为空
+        List<User> users = userMapper.findAllUser();
+        System.out.println(users);
+    }
+    @Test
     public void testFindUser() {
         //条件为空
         List<User> users = userMapper.selectList(null);

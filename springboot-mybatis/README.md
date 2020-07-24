@@ -1,5 +1,4 @@
-### springboot-mybatis(springboot+mybatis)
-#### springboot整合mybatis
+### springboot-mybatis
 ```
 概要：
 1.SpringbootMybatisApplicationTests测试类

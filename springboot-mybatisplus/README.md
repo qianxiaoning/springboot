@@ -1,4 +1,4 @@
-### springboot-mybatisplus(springboot+mybatisplus)
+### springboot-mybatisplus
 #### springboot整合mybatisplus
 ```
 概要：

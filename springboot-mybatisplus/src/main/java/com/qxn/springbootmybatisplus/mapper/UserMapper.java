@@ -7,4 +7,5 @@ import java.util.List;
 
 //@Mapper//@Mapper交给spring管理
 public interface UserMapper extends BaseMapper<User>{
+    List<User> findAllUser();
 }

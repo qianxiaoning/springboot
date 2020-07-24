@@ -1,0 +1,16 @@
+server:
+  port: 8072
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/pages/
+      suffix: .jsp
+
+# dubbo配置
+dubbo:
+  scan:
+    basePackages: com.qxn
+  application:
+    name: consumer-user
+  registry:
+    address: zookeeper://192.168.89.129:2181?backup=192.168.89.129:2182,192.168.89.129:2183
