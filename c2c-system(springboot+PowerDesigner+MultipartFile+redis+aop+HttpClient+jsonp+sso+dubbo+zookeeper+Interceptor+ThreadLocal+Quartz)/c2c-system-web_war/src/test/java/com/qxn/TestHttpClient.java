@@ -1,7 +1,5 @@
 package com.qxn;
 
-import java.io.IOException;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;

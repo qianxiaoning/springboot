@@ -1157,8 +1157,5 @@ UserController.logout2
 36.3.运行前端项目c2c-system_backgroundSystem_frontEnd，c2c-system_web_frontEnd
 36.4.导入数据库c2csystemdb.sql
 36.5.导入c2c-system后台聚合项目，运行
-==
-锁防止并发情况，抢占资源，导致数据出错
 
-tomcat=>消息中间件（解决海量数据同步处理问题）=>数据库
 ```
