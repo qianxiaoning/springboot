@@ -26,9 +26,12 @@ Vue.prototype.$event = new Vue();
 import filters from './filters/filters';
 Object.keys(filters).forEach(key => { Vue.filter(key, filters[key]) })
 //生产环境警告去除
-Vue.config.productionTip = false
+// Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+window.openBackAudio=function(){
+    console.log(1);
+}
 new Vue({
   el: '#app',
   router,

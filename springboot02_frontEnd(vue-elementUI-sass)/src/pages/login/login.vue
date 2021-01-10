@@ -22,14 +22,19 @@ export default {
     },
     methods:{
         async login(){                        
-            const res = await this.$http.post(this.$urls.login,{
-                username:this.username,
-                password:this.password,
-                isRemember:this.isRemember
-            });
+            // const res = await this.$http.post(this.$urls.login,{
+            //     username:this.username,
+            //     password:this.password,
+            //     isRemember:this.isRemember
+            // });
             // console.log(res);            
-            if(res === undefined)return;
-            this.$router.push({ name: 'main'});
+            // if(res === undefined)return;
+            this.$router.replace({ name: 'main'});
+            // setTimeout(()=>{
+                // this.$router.push({ name: 'main'});
+            // },2000);
+            // location.href="http://h5.cd-info.com.cn:8113/#/main/sysManage/roleManage";
+            // location.replace("http://h5.cd-info.com.cn:8113/#/main/sysManage/roleManage");
         }
     }
 }

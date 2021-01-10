@@ -1,0 +1,38 @@
+server:
+  port: 8000
+  tomcat:
+    threads:
+      max: 1000
+  servlet:
+    context-path: /
+swagger:
+  base-path: /**
+  base-package: 'com.company.springbootquickstart01'
+  title: 'spring-boot-swagger-demo'
+  description: '基于Swagger构建的SpringBoot RESTApi 文档'
+spring:
+  datasource:
+    #引入druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/springboot_quickstart01?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    username: root
+    password: root
+  #redis
+  redis:
+    database: 0
+    host: 192.168.89.136
+    port: 6379
+    password: root
+    timeout: 3000
+#mybatis-plus配置
+mybatis-plus:
+  type-aliases-package: com.company.springbootquickstart01.entity
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.company.mapper: debug
+

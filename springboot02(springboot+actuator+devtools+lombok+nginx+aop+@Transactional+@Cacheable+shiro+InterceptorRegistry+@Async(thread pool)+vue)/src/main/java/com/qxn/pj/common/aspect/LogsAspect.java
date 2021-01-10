@@ -129,7 +129,7 @@ public class LogsAspect {
 //			}
 //		}.start();
 		
-		Future<Integer> insertLog = logsService.insertLog(entity);		
+			Future<Integer> insertLog = logsService.insertLog(entity);
 //		Integer rows = insertLog.get();//需要取值的地方会被阻塞
 	}
 	

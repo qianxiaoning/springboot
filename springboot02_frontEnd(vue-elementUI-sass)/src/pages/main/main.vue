@@ -62,7 +62,13 @@ export default {
       this.logout();
     },
     async logout() {
-      const res = await this.$http.post(this.$urls.logout);
+    //   const res = await this.$http.post(this.$urls.logout);
+        // setTimeout(()=>{
+            // this.$router.go(-1);
+            history.go(-1);
+        // },2000);
+        // location.replace("http://h5.cd-info.com.cn:8113/");
+        // location.href="http://h5.cd-info.com.cn:8113";
     },
     async getLoginUser() {
       const res = await this.$http.get(this.$urls.getLoginUser);

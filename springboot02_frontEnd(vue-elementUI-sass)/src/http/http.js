@@ -19,75 +19,75 @@ let instanceAxios = axios.create({
     withCredentials:true,
     // baseURL:url    
 });
-// 请求拦截器
-instanceAxios.interceptors.request.use(
-  (config)=>{
-    // 发送请求之前    
-    // loading
-    loadingInstance = Loading.service({
-        text:'加载中...',
-        background:'rgba(0,0,0,.3)'
-    });        
-    return config
-  },
-  //请求错误
-  (error)=>{    
-    //loading 停止
-    loadingInstance.close();
-    // 弹窗 网络异常    
-    messageInstance = Message({
-        message:'网络异常',
-        type:'warning',
-    });
-    return Promise.reject(error)
-  },
-)
-// 响应拦截器
-instanceAxios.interceptors.response.use(
-  (response)=>{
-    //响应数据  
-    //loading停止
-    loadingInstance.close();
-    const res = response.data;
-    //请求正常
-    if(res.code==200){
-        return res;
-    }
-    //登录失效
-    else if(res.code==302){
-        messageInstance = Message({
-            message:'账号已掉线，请重新登录',
-            type:'warning',
-            duration:1000,
-            onClose:()=>{
-                //重定向回登录页
-                window.location.replace("/");
-            }
-        });
-        return res;
-    }    
-    //前端请求错误
-    else if(res.code==403){
-        messageInstance = Message({
-            message:res.message,
-            type:'warning',
-        });
-        return Promise.reject(response);
-    }    
-  },
-  (error)=>{    
-    console.log(error);
-    //loading停止
-    loadingInstance.close();
-    // 服务端问题
-    messageInstance = Message({
-        message:"系统维护中",
-        // message:error,
-        type:'warning',
-    });
-    return Promise.reject(error)
-  },
-)
+// // 请求拦截器
+// instanceAxios.interceptors.request.use(
+//   (config)=>{
+//     // 发送请求之前    
+//     // loading
+//     loadingInstance = Loading.service({
+//         text:'加载中...',
+//         background:'rgba(0,0,0,.3)'
+//     });        
+//     return config
+//   },
+//   //请求错误
+//   (error)=>{    
+//     //loading 停止
+//     loadingInstance.close();
+//     // 弹窗 网络异常    
+//     messageInstance = Message({
+//         message:'网络异常',
+//         type:'warning',
+//     });
+//     return Promise.reject(error)
+//   },
+// )
+// // 响应拦截器
+// instanceAxios.interceptors.response.use(
+//   (response)=>{
+//     //响应数据  
+//     //loading停止
+//     loadingInstance.close();
+//     const res = response.data;
+//     //请求正常
+//     if(res.code==200){
+//         return res;
+//     }
+//     //登录失效
+//     else if(res.code==302){
+//         messageInstance = Message({
+//             message:'账号已掉线，请重新登录',
+//             type:'warning',
+//             duration:1000,
+//             onClose:()=>{
+//                 //重定向回登录页
+//                 window.location.replace("/");
+//             }
+//         });
+//         return res;
+//     }    
+//     //前端请求错误
+//     else if(res.code==403){
+//         messageInstance = Message({
+//             message:res.message,
+//             type:'warning',
+//         });
+//         return Promise.reject(response);
+//     }    
+//   },
+//   (error)=>{    
+//     console.log(error);
+//     //loading停止
+//     loadingInstance.close();
+//     // 服务端问题
+//     messageInstance = Message({
+//         message:"系统维护中",
+//         // message:error,
+//         type:'warning',
+//     });
+//     // return Promise.reject(error)
+//   },
+// )
 
 //POST新增 DELETE删除 PUT更新 GET查询
 const http = {
@@ -112,5 +112,5 @@ const http = {
         })
     },
 };
-window.instanceAxios = instanceAxios;
+// window.instanceAxios = instanceAxios;
 export default http

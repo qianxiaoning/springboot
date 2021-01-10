@@ -12,7 +12,7 @@ import com.qxn.pj.sys.vo.UserDeptRoleIds;
 public interface UsersRolesDao {
 	@Delete("delete from users_roles where role_id=#{id}")
 	int deleteObjectByRoleId(Integer id);
-	//mybatisAssociationPra练习
+	//mybatisAssociationPra练习</if>
 	@Select("select role_id from users_roles where user_id=#{id}")
 	List<Integer> findRoleIdsByUsersId(Integer id);
 	int insertRoles(UserDeptRoleIds userDeptRoleIds);
