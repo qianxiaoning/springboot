@@ -1,5 +1,6 @@
-### springbootQuickStart01 springboot脚手架01
-#### 结构：
+### springbootQuickStart01
+#### springboot脚手架01
+- 结构：
 ```
 codes 逻辑代码层：
  .common
@@ -26,7 +27,7 @@ test bean简单测试类：
  .SimpleTest
 ```
 ---
-#### 过程：
+- 过程：
 ```
 libs 第三方库层：
 1.redis
