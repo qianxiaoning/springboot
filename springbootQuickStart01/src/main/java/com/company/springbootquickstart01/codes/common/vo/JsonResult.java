@@ -1,4 +1,4 @@
-package com.company.springbootquickstart01.common.vo;
+package com.company.springbootquickstart01.codes.common.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

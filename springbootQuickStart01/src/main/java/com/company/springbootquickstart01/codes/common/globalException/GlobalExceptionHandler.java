@@ -1,7 +1,6 @@
-package com.company.springbootquickstart01.common.globalException;
+package com.company.springbootquickstart01.codes.common.globalException;
 
-
-import com.company.springbootquickstart01.common.vo.JsonResult;
+import com.company.springbootquickstart01.codes.common.vo.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

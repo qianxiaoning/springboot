@@ -1,6 +1,7 @@
 package com.company.springbootquickstart01.springBootTest;
 
-import org.junit.jupiter.api.Test;
+import com.company.springbootquickstart01.codes.common.util.JasypUtil;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,4 +17,8 @@ public class BeanTest {
 //        int rowCount = logsDao.getRowCount("sasa");
 //        System.out.println(rowCount);
 //    }
+    @Test
+    public void test1() {
+        JasypUtil.main();
+    }
 }

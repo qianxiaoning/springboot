@@ -1,6 +1,7 @@
-package com.company.springbootquickstart01.common.util;
+package com.company.springbootquickstart01.codes.common.util;
 
-import com.company.springbootquickstart01.entity.UserDo;
+
+import com.company.springbootquickstart01.codes.entity.UserDo;
 
 public class ThreadLocalUtil {
 private static ThreadLocal<UserDo> thread = new ThreadLocal<UserDo>();

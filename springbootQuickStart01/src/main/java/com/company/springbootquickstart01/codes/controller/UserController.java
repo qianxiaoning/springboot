@@ -1,20 +1,15 @@
-package com.company.springbootquickstart01.controller;
+package com.company.springbootquickstart01.codes.controller;
 
-import com.company.springbootquickstart01.common.vo.JsonResult;
-import com.company.springbootquickstart01.entity.UserDo;
-import com.company.springbootquickstart01.param.UpdateUserParam;
-import com.company.springbootquickstart01.service.UserService;
-import com.company.springbootquickstart01.vo.UserVo;
+import com.company.springbootquickstart01.codes.common.vo.JsonResult;
+import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.param.UpdateUserParam;
+import com.company.springbootquickstart01.codes.service.UserService;
+import com.company.springbootquickstart01.codes.vo.UserVo;
 import io.swagger.annotations.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @Api(tags = "用户操作接口")

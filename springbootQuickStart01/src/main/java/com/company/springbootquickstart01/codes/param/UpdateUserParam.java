@@ -1,4 +1,4 @@
-package com.company.springbootquickstart01.param;
+package com.company.springbootquickstart01.codes.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;

@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.company.springbootquickstart01.dao")
+@MapperScan("com.company.springbootquickstart01.codes.dao")
 public class SpringbootQuickstart01Application {
 
     public static void main(String[] args) {

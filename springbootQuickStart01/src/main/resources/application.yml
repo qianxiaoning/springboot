@@ -21,13 +21,13 @@ spring:
   #redis
   redis:
     database: 0
-    host: 192.168.89.136
+    host: 192.168.137.128
     port: 6379
     password: root
     timeout: 3000
 #mybatis-plus配置
 mybatis-plus:
-  type-aliases-package: com.company.springbootquickstart01.entity
+  type-aliases-package: com.company.springbootquickstart01.codes.entity
   mapper-locations: classpath:/mybatis/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
@@ -36,3 +36,7 @@ logging:
   level:
     com.company.mapper: debug
 
+#自定义参数
+qxn:
+  jasypt:
+    factor: EbfYkotulv73I8p0mXI50JMXopxZTKJ0

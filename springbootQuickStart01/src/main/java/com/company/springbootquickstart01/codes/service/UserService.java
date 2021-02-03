@@ -1,9 +1,8 @@
-package com.company.springbootquickstart01.service;
+package com.company.springbootquickstart01.codes.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.company.springbootquickstart01.dao.UserDao;
-import com.company.springbootquickstart01.entity.UserDo;
-import com.company.springbootquickstart01.param.UpdateUserParam;
+import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.param.UpdateUserParam;
 
 public interface UserService extends IService<UserDo> {
     UserDo findUserById(Long id);

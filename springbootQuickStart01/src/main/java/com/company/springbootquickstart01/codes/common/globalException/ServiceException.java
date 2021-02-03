@@ -1,4 +1,4 @@
-package com.company.springbootquickstart01.common.globalException;
+package com.company.springbootquickstart01.codes.common.globalException;
 
 public class ServiceException extends RuntimeException {
 	private static final long serialVersionUID = -7330825234259926899L;

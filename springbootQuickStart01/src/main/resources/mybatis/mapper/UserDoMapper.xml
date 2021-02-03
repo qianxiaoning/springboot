@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.company.springbootquickstart01.dao.UserDao">
-    <select id="findUserById" resultType="UserDo">
+<mapper namespace="com.company.springbootquickstart01.codes.dao.UserDao">
+    <select id="findUserById" resultType="com.company.springbootquickstart01.codes.entity.UserDo">
         select * from user where id=#{id}
     </select>
 </mapper>

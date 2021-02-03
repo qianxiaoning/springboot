@@ -1,4 +1,4 @@
-package com.company.springbootquickstart01.common.util;
+package com.company.springbootquickstart01.codes.common.util;
 
 import javax.servlet.http.HttpServletRequest;
 

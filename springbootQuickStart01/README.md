@@ -1,30 +1,32 @@
-### springbootQuickStart01
-#### springboot脚手架01
-#### 将现有的架构重组一下，改成模块化，重构方便的，再加新功能
+### springbootQuickStart01 springboot脚手架01
+#### 结构：
 ```
 codes 逻辑代码层：
-1.全局异常类
-codes.common.globalException.GlobalExceptionHandler
-2.异常对象
-codes.common.globalException.ServiceException
-3.cookie工具类
-codes.common.util.CookieUtil
-4.ip工具类
-codes.common.util.IPUtil
-5.json和对象互转工具类
-codes.common.util.ObjectMapperUtil
-6.threadlocal工具类
-codes.common.util.ThreadLocalUtil
-7.接口返回vo对象
-codes.common.vo.JsonResult
-8.公共实体类
-codes.common.entity.BasePojo
-9.bean测试类
-springbootquickstart01.springBootTest.BeanTest
-10.简单测试类
-springbootquickstart01.test.SimpleTest
+ .common
+  .entity 公共实体类
+   .BasePojo pojo基类
+  .globalException
+   .GlobalExceptionHandler 全局异常类
+   .ServiceException 异常对象
+  .util
+   .CookieUtil cookie工具类
+   .IPUtil ip工具类
+   .JasypUtil cookie工具类
+   .IPUtil Jasyp加解密工具类
+   .ObjectMapperUtil json和对象互转工具类
+   .ServiceUtil 业务层工具类
+   .ThreadLocalUtil threadlocal工具类
+  .vo
+   .JsonResult 接口返回vo对象
+   .PageObject 分页vo对象
+
+springBootTest bean测试类：
+ .BeanTest
+test bean简单测试类：
+ .SimpleTest
 ```
 ---
+#### 过程：
 ```
 libs 第三方库层：
 1.redis
@@ -42,7 +44,7 @@ application.yml增加redis配置
 1.4
 引入spring-boot-starter-data-redis后，
 会自动注入redisTemplate(String,Object)和stringRedisTemplate(String,String)对象
-redisTemplate(String,Object)的key,value默认序列化方式是JdkSerializationRedisSerializer，会显示乱码
+redisTemplate(String,Object)的keyJsonResult,value默认序列化方式是JdkSerializationRedisSerializer，会显示乱码
 libs.redis.RedisConfig重写redisTemplate对象，
 将RedisTemplate的key,value的序列化方式指定为StringRedisSerializer和GenericJackson2JsonRedisSerializer
 使用方式：

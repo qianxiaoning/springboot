@@ -1,4 +1,4 @@
-package com.company.springbootquickstart01.vo;
+package com.company.springbootquickstart01.codes.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
