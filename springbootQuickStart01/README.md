@@ -118,6 +118,18 @@ private Date createTime;
 private Date updateTime;
 4.4.2 MybatisPlusConfig实现类MyMetaObjectHandler
 重写insertFill、updateFill方法。这样使用mybatisplus insert/update方法时就会自动填充值
+
+5 普通登录
+5.1 数据库密码解密与参数密码比较
+String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
+password.equals(param.getPassword())
+5.2 成功登录则，
+生成token，
+String token = UUID.randomUUID().toString();
+token为key，用户信息存入redis，
+redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
+token存入浏览器一级域名的cookie中，实现cookie在二级域名共享，作用于分布式服务单点登录（一处登录，处处通行）
+CookieUtil.addCookie(request, response, "user_token", token,7*24*3600, "localhost");
 ```
 ---
 ```

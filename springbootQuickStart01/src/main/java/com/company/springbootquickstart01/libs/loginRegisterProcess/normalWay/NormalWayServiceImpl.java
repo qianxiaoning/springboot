@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
+import com.company.springbootquickstart01.codes.common.util.CookieUtil;
 import com.company.springbootquickstart01.codes.common.util.JasypUtil;
 import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
 import com.company.springbootquickstart01.codes.dao.UserDao;
@@ -13,7 +14,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Service
 public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implements NormalWayService {
@@ -23,8 +26,29 @@ public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implement
     private RedisUtil redisUtil;
 
     @Override
-    public void login(NormalWayParam param) {
-
+    public LoginVo login(NormalWayParam param, HttpServletResponse response, HttpServletRequest request) {
+        //查询账户是否存在
+        QueryWrapper<UserDo> qw = new QueryWrapper<>();
+        qw.eq("account",param.getAccount());
+        UserDo userDo = userDao.selectOne(qw);
+        if(userDo == null){
+            throw new ServiceException("账号不存在");
+        }
+        //密码比较
+        String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
+        if(password.equals(param.getPassword())){
+            //成功登录
+            LoginVo loginVo = new LoginVo();
+            BeanUtils.copyProperties(userDo, loginVo);
+            //将token与用户挂钩，用户信息存入redis，token存入cookie
+            String token = UUID.randomUUID().toString();
+            redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
+            CookieUtil.addCookie(request, response, "user_token", token,
+                    7*24*3600, "localhost");//c2c-system.com
+            return loginVo;
+        }else{
+            throw new ServiceException("账号或密码不正确");
+        }
     }
 
     @Override

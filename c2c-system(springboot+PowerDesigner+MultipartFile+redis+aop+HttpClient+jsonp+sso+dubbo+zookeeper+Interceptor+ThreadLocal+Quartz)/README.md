@@ -1007,7 +1007,7 @@ DubboCartServiceImpl.addItem
 
 31.1.权限控制，不登录不能看购物车、订单等个人页面
 拦截器：
-条件：客户端是否有cookidubboe，redis中是否有记录
+条件：客户端是否有cookie，redis中是否有记录
 web.xml => 拦截器类，拦截器配置文件
 由于只对web站点生效，加在web项目中
 

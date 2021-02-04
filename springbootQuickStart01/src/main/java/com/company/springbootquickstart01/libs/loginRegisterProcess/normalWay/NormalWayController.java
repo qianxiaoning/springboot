@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 @RestController
 @Api(tags = "用户操作接口")
@@ -24,8 +27,8 @@ public class NormalWayController {
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
-    public JsonResult<UserVo> login(@RequestBody NormalWayParam param) {
-        normalWayService.login(param);
-        return new JsonResult("登录成功");
+    public JsonResult<LoginVo> login(@RequestBody NormalWayParam param, HttpServletResponse response, HttpServletRequest request) {
+        LoginVo vo = normalWayService.login(param,response,request);
+        return new JsonResult(vo);
     }
 }
