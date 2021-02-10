@@ -124,12 +124,28 @@ private Date updateTime;
 String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
 password.equals(param.getPassword())
 5.2 成功登录则，
-生成token，
-String token = UUID.randomUUID().toString();
+uuid和用户ip生成token，
+String uuid = UUID.randomUUID().toString();
+String ip = IPUtil.getIpAddr(request);
+String token = uuid + ip;
 token为key，用户信息存入redis，
 redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
-token存入浏览器一级域名的cookie中，实现cookie在二级域名共享，作用于分布式服务单点登录（一处登录，处处通行）
-CookieUtil.addCookie(request, response, "user_token", token,7*24*3600, "localhost");
+uuid存入浏览器一级域名的cookie中，实现cookie在二级域名共享，作用于分布式服务单点登录（一处登录，处处通行）
+CookieUtil.addCookie(request, response, "user_uuid",uuid,7*24*3600, "localhost");
+
+6 过滤器
+法1 @WebFilter法
+启动类添加@ServletComponentScan注解
+类实现Filter接口，在类上加@WebFilter注解
+通过@WebFilter注解配置过滤器信息，名称filterName、url匹配模式urlPatterns、过滤器初始化参数initParams
+doFilter方法执行顺序看类名称排序
+法2 @WebFilter法
+类实现Filter接口，注册FilterRegistrationBean对象，将类注入FilterRegistrationBean对象中，
+由FilterRegistrationBean对象配置过滤器信息，setName(String)、setUrlPatterns(Collection)、
+setInitParameters(Map)
+doFilter方法执行顺序由setOrder(int)方法中数字决定，越小越优先
+6.1 过滤器init方法中能获取到filterConfig，将初始化参数存入ThreadLocal，供doFilter方法使用
+6.2 doFilter方法，能对request/response作预处理，或者请求拦截
 ```
 ---
 ```

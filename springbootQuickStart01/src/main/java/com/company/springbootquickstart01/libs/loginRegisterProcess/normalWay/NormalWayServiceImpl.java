@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
 import com.company.springbootquickstart01.codes.common.util.CookieUtil;
+import com.company.springbootquickstart01.codes.common.util.IPUtil;
 import com.company.springbootquickstart01.codes.common.util.JasypUtil;
 import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
 import com.company.springbootquickstart01.codes.dao.UserDao;
@@ -40,10 +41,12 @@ public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implement
             //成功登录
             LoginVo loginVo = new LoginVo();
             BeanUtils.copyProperties(userDo, loginVo);
-            //将token与用户挂钩，用户信息存入redis，token存入cookie
-            String token = UUID.randomUUID().toString();
+            //uuid和用户ip生成token，将token与用户挂钩存入redis，uuid存入cookie
+            String uuid = "uuid" + UUID.randomUUID().toString();
+            String ip = "ip"+IPUtil.getIpAddr(request).replace(":","：");
+            String token = uuid + ip;
             redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
-            CookieUtil.addCookie(request, response, "user_token", token,
+            CookieUtil.addCookie(request, response, "user_uuid", uuid,
                     7*24*3600, "localhost");//c2c-system.com
             return loginVo;
         }else{

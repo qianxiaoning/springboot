@@ -40,20 +40,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserDo> implements Use
             throw new ServiceException("没有数据");
         }
         //redis测试
-        HashMap<String, Object> hm = new HashMap<>();
-        hm.put("id",1);
-        hm.put("name","qxn");
-        redisTemplate.opsForValue().set("map",hm);
-        Object map = redisTemplate.opsForValue().get("map");
-        System.out.println(map);
-        redisTemplate.opsForValue().set("string","string");
-        stringRedisTemplate.opsForValue().set("stringRedis","stringRedis");
-        String stringRedis = stringRedisTemplate.opsForValue().get("stringRedis");
-        System.out.println(stringRedis);
-        redisTemplate.opsForValue().set("userDo",userDo);
-        UserDo userDoRedis = (UserDo)redisTemplate.opsForValue().get("userDo");
-        redisUtil.set("userDoRedisUtil",userDo);
-        UserDo userDoRedisUtil = (UserDo) redisUtil.get("userDoRedisUtil");
+//        HashMap<String, Object> hm = new HashMap<>();
+//        hm.put("id",1);
+//        hm.put("name","qxn");
+//        redisTemplate.opsForValue().set("map",hm);
+//        Object map = redisTemplate.opsForValue().get("map");
+//        System.out.println(map);
+//        redisTemplate.opsForValue().set("string","string");
+//        stringRedisTemplate.opsForValue().set("stringRedis","stringRedis");
+//        String stringRedis = stringRedisTemplate.opsForValue().get("stringRedis");
+//        System.out.println(stringRedis);
+//        redisTemplate.opsForValue().set("userDo",userDo);
+//        UserDo userDoRedis = (UserDo)redisTemplate.opsForValue().get("userDo");
+//        redisUtil.set("userDoRedisUtil",userDo);
+//        UserDo userDoRedisUtil = (UserDo) redisUtil.get("userDoRedisUtil");
         //
         return userDo;
     }

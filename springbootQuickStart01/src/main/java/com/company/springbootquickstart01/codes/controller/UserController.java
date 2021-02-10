@@ -1,5 +1,6 @@
 package com.company.springbootquickstart01.codes.controller;
 
+import com.company.springbootquickstart01.codes.common.annotation.InsertLog;
 import com.company.springbootquickstart01.codes.common.vo.JsonResult;
 import com.company.springbootquickstart01.codes.entity.UserDo;
 import com.company.springbootquickstart01.codes.param.UpdateUserParam;
@@ -20,6 +21,7 @@ public class UserController {
 
     @GetMapping("/findUserById")
     @ApiOperation("id查找单个用户")
+    @InsertLog("id查找单个用户")
     @ApiImplicitParam(name="id",value="用户id",required = true)
     public JsonResult<UserDo> findUserById(Long id) {
         UserDo userdo = userService.findUserById(id);
