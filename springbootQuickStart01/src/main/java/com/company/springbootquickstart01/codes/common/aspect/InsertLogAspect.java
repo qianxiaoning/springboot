@@ -1,6 +1,7 @@
 package com.company.springbootquickstart01.codes.common.aspect;
 
 import com.company.springbootquickstart01.codes.common.util.ObjectMapperUtil;
+import com.company.springbootquickstart01.codes.common.vo.JsonResult;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -33,7 +34,18 @@ public class InsertLogAspect {
     //通知
     @Around("logPointCut()")
     public Object aroundAdvice(ProceedingJoinPoint jp)throws Throwable{
-        Object result = jp.proceed();//调用下一次切面或目标方法
+        long beforeTime = System.currentTimeMillis();
+        //调用下一次切面或目标方法
+        JsonResult result = (JsonResult)jp.proceed();
+        long time = System.currentTimeMillis() - beforeTime;
+        if(result.getCode() == 200){
+            //插入日志
+            insertLog(jp,time,result);
+        }
         return result;
+    }
+
+    private void insertLog(ProceedingJoinPoint jp, long time, JsonResult result) {
+
     }
 }

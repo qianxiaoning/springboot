@@ -20,8 +20,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/findUserById")
-    @ApiOperation("id查找单个用户")
-    @InsertLog("id查找单个用户")
+    @ApiOperation("根据id查找单个用户")
+    @InsertLog("根据id查找单个用户")
     @ApiImplicitParam(name="id",value="用户id",required = true)
     public JsonResult<UserDo> findUserById(Long id) {
         UserDo userdo = userService.findUserById(id);
@@ -29,12 +29,9 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    @ApiOperation("修改用户")
-    public JsonResult<UserVo> updateUser(@RequestBody UpdateUserParam param) {
+    @ApiOperation("修改用户资料")
+    public JsonResult updateUser(@RequestBody UpdateUserParam param) {
         userService.updateUser(param);
-        UserDo userdo = userService.getById(param.getId());
-        UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(userdo, userVo);
-        return new JsonResult(userVo);
+        return new JsonResult("修改成功，请重新登录");
     }
 }

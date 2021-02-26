@@ -9,13 +9,36 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfig implements WebMvcConfigurer {
     @Autowired
     private TimeAllowedInterceptor timeAllowedInterceptor;
+    @Autowired
+    private LoginedValidateInterceptor loginedValidateInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        String[] swaggerExcludes =
+                new String[]{
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        "/swagger-resources/**",
+                        "/",
+                        "/error",
+                        "/csrf"
+                };
+        //允许访问时间拦截器
         registry.addInterceptor(timeAllowedInterceptor)
                 //拦截路径
                 .addPathPatterns("/**")
-//                .excludePathPatterns("/v2/api-docs-ext")
+                .excludePathPatterns(swaggerExcludes)
         ;
-//        registry.addInterceptor(new AInterceptor2());
+        //登录验证拦截器
+        String[] serviceExcludes =
+                new String[]{
+                        "/api/user/login",
+                        "/api/user/register",
+                };
+        registry.addInterceptor(loginedValidateInterceptor)
+                //拦截路径
+                .addPathPatterns("/**")
+                .excludePathPatterns(swaggerExcludes)
+                .excludePathPatterns(serviceExcludes)
+        ;
     }
 }

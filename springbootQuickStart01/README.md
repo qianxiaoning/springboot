@@ -100,40 +100,16 @@ dao层 extends BaseMapper<Do>
 entity上： 
 @TableName("user")，
 @TableId(value = "id", type = IdType.ASSIGN_ID)//雪花算法自动生成id
-@Version//乐观锁，使用mybatisplus进行改删操作时触发
 @TableLogic//表字段逻辑处理
+3.4 乐观锁，使用mybatisplus进行改删操作时触发，+1
+3.4.1 在MybatisPlusConfig的MybatisPlusInterceptor核心插件中，
+添加OptimisticLockerInnerInterceptor乐观锁插件
+3.4.2
+在实体类字段上添加@Version注解 
+3.5 AutoGenerator代码生成器
+3.5.1 添加pom依赖mybatis-plus-generator、velocity-engine-core
 
-4 普通注册
-4.1 密码加密保存 
-param.setPassword(JasypUtil.encryptWithSHA512(param.getPassword()));
-4.2 调用mybatisplus的雪花算法
-Long id = IdWorker.getId(userDo1);
-4.3 ServiceUtil.createEntity反射给实例设置属性值
-4.4 备选：mybatisPlus自动填充功能
-4.4.1 
-UserDo：注解填充字段
-@TableField(fill = FieldFill.INSERT)
-private Date createTime;
-@TableField(fill = FieldFill.INSERT_UPDATE)
-private Date updateTime;
-4.4.2 MybatisPlusConfig实现类MyMetaObjectHandler
-重写insertFill、updateFill方法。这样使用mybatisplus insert/update方法时就会自动填充值
-
-5 普通登录
-5.1 数据库密码解密与参数密码比较
-String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
-password.equals(param.getPassword())
-5.2 成功登录则，
-uuid和用户ip生成token，
-String uuid = UUID.randomUUID().toString();
-String ip = IPUtil.getIpAddr(request);
-String token = uuid + ip;
-token为key，用户信息存入redis，
-redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
-uuid存入浏览器一级域名的cookie中，实现cookie在二级域名共享，作用于分布式服务单点登录（一处登录，处处通行）
-CookieUtil.addCookie(request, response, "user_uuid",uuid,7*24*3600, "localhost");
-
-6 过滤器
+4 过滤器
 法1 @WebFilter法
 启动类添加@ServletComponentScan注解
 类实现Filter接口，在类上加@WebFilter注解
@@ -147,12 +123,12 @@ doFilter方法执行顺序看类名称排序
 setInitParameters(Map)
 doFilter方法执行顺序由setOrder(int)方法中数字决定，越小越优先
 过滤器中可引入spring的bean对象
-6.1 过滤器init方法中能获取到过滤器信息filterConfig，将初始化参数存入ThreadLocal，供doFilter方法使用
-6.2 doFilter方法，能对request/response作预处理，或者请求拦截
+4.1 过滤器init方法中能获取到过滤器信息filterConfig，将初始化参数存入ThreadLocal，供doFilter方法使用
+4.2 doFilter方法，能对request/response作预处理，或者请求拦截
 
-7 拦截器
-7.1 类上加@Component交给spring管理，类实现HandlerInterceptor接口，重写preHandle、postHandle、afterCompletion方法
-7.2 类实现WebMvcConfigurer接口，重写addInterceptors方法，自动注入拦截器对象
+5 拦截器
+5.1 类上加@Component交给spring管理，类实现HandlerInterceptor接口，重写preHandle、postHandle、afterCompletion方法
+5.2 类实现WebMvcConfigurer接口，重写addInterceptors方法，自动注入拦截器对象
 @Autowired
 private AInterceptor aInterceptor;
 注入拦截器
@@ -160,10 +136,10 @@ registry.addInterceptor(aInterceptor)
 //添加拦截路径
 .addPathPatterns("/**")
 //排除拦截路径
-.excludePathPatterns("/v2/api-docs-ext");
-7.3 拦截器交给spring管理后，拦截器中可以引入spring的bean对象
+.excludePathPatterns("/login");
+5.3 拦截器交给spring管理后，拦截器中可以引入spring的bean对象
 
-8 监听器
+6 监听器
 系统监听器：
 监听servletContext、HttpSession、servletRequest等域对象的创建和销毁事件
 法1：
@@ -172,19 +148,19 @@ registry.addInterceptor(aInterceptor)
 法2：
 监听器上添加@WebListener注解，启动类添加@ServletComponentScan注解
 自定义监听事件：
-8.1 AEvent定义事件
-8.2 AEventListener定义监听器，获取事件中的信息，进行逻辑处理，或者通知别的微服务
-8.3 ATrigger触发事件
-8.4 BeanTest.test2测试
+6.1 AEvent定义事件
+6.2 AEventListener定义监听器，获取事件中的信息，进行逻辑处理，或者通知别的微服务
+6.3 ATrigger触发事件
+6.4 BeanTest.test2测试
 
-9 过滤器，拦截器，监听器使用场景
+7 过滤器，拦截器，监听器使用场景
 总结：
 设计模式：
 过滤器Filter：对请求进行预处理，对响应进行后处理
 拦截器Interceptor：获取请求的上下文，拦截不符合要求的请求，实现需要的业务逻辑
 监听器Listener：当一个事件发生的时候，获得这个事件发生的详细信息，实现业务逻辑，但不干预这个事件本身的进程
 
-9.1 过滤器：
+7.1 过滤器：
 过滤器基于函数回调
 过滤器依赖servlet，只能在servlet容器中，在Servlet前后起作用，
 对用户请求进行预处理，对HttpServletResponse进行后处理。
@@ -198,7 +174,7 @@ Filter可以通过通配符对web服务器管理的所有web资源：例如Jsp�
 过滤器设置字符编码（CharacterEncodingFilter），解决post乱码，过滤敏感低俗危险词汇，过滤掉没用的参数，
 压缩响应信息。
 
-9.2 拦截器：
+7.2 拦截器：
 拦截器基于反射，拦截器属于spring组件，不依赖servlet
 拦截器更细，在controller，service，dao层都可以使用拦截器，对该层进行拦截
 拦截器能够深入到方法前后、异常抛出前后等
@@ -220,14 +196,58 @@ aop：
 
 拦截器只能用在controller层，aop能用在service层
 
-9.3 监听器：
+7.3 监听器：
 统计统计网站访问量、在线人数和在线用户，利用HttpSessionLisener
 系统启动时加载初始化信息，利用ServletContextListener
 记录用户访问路径。
 
 监听器用于监听web应用中某些对象、信息的创建、销毁、增加，修改，删除等动作的发生，然后作出相应的响应处理。
 当范围对象的状态发生变化的时候，服务器自动调用监听器对象中的方法。
+
+8 普通注册
+8.1 密码加密保存 
+param.setPassword(JasypUtil.encryptWithSHA512(param.getPassword()));
+8.2 调用mybatisplus的雪花算法
+Long id = IdWorker.getId(userDo1);
+8.3 ServiceUtil.createEntity反射给实例设置属性值
+8.4 备选：mybatisPlus自动填充功能
+8.4.1 
+UserDo：注解填充字段
+@TableField(fill = FieldFill.INSERT)
+private Date createTime;
+@TableField(fill = FieldFill.INSERT_UPDATE)
+private Date updateTime;
+8.4.2 MybatisPlusConfig实现类MyMetaObjectHandler
+重写insertFill、updateFill方法。这样使用mybatisplus insert/update方法时就会自动填充值
+
+9 普通登录
+9.1 数据库密码解密与参数密码比较
+String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
+password.equals(param.getPassword())
+9.2 成功登录则，
+uuid和用户ip生成token，
+String uuid = UUID.randomUUID().toString();
+String ip = IPUtil.getIpAddr(request);
+String token = uuid + ip;
+token为key，用户信息存入redis，
+redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
+uuid存入浏览器一级域名的cookie中，实现cookie在二级域名共享，作用于分布式服务单点登录（一处登录，处处通行）
+CookieUtil.addCookie(request, response, "user_uuid",uuid,7*24*3600, ConstantsUtil.COOKIE_DOMAIN);
+
+10 登录验证拦截器验证是否为登录状态
+10.1 将LoginedValidateInterceptor登录验证拦截器，放入InterceptorConfig拦截器配置类，
+排除登录注册等接口路径。
+10.2 从cookie中取出uuid，加上ip，组成token，去redis中查询值，
+查不到说明未登录或者登录已过期，抛出异常。
+能查到说明是登录状态，将用户信息放入threadLocal中，放行请求。
+
+11 springboot事务
+在serviceImpl的两条及以上改数据库操作的方法上，使用事务，
+添加@Transactional(rollbackFor = {Exception.class})注解
+
 ```
+
+
 ---
 ```
 待整理：

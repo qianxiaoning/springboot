@@ -115,7 +115,7 @@ public class UserController {
 		}
 		if(!StringUtils.isEmpty(ticket)) {
 			jedisCluster.del(ticket);
-			Cookie cookie = new Cookie(TICKET, "");
+			Cookie cookie = new Cookie(TICKET, null);
 			cookie.setMaxAge(0);
 			cookie.setPath("/");
 			cookie.setDomain("c2c-system.com");

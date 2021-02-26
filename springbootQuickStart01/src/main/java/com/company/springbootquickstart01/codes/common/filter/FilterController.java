@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/filter")
 public class FilterController {
     @GetMapping("/filterTest")
-    @ApiOperation("获取pv")
+    @ApiOperation("走过滤器")
     public JsonResult filterTest() {
         return new JsonResult();
     }

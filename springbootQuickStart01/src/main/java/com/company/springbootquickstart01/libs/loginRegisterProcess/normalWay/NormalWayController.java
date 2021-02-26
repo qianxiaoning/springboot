@@ -27,8 +27,16 @@ public class NormalWayController {
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
-    public JsonResult<LoginVo> login(@RequestBody NormalWayParam param, HttpServletResponse response, HttpServletRequest request) {
-        LoginVo vo = normalWayService.login(param,response,request);
+    public JsonResult<LoginVo> login(@RequestBody NormalWayParam param, HttpServletRequest request,HttpServletResponse response) {
+        LoginVo vo = normalWayService.login(param,request,response);
         return new JsonResult(vo);
     }
+
+    @PostMapping("/logout")
+    @ApiOperation("退出登录")
+    public JsonResult logout(HttpServletRequest request,HttpServletResponse response) {
+        normalWayService.logout(request,response);
+        return new JsonResult("退出成功");
+    }
+
 }

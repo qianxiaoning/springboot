@@ -10,5 +10,7 @@ public interface NormalWayService extends IService<UserDo> {
 
     void register(NormalWayParam param);
 
-    LoginVo login(NormalWayParam param, HttpServletResponse response, HttpServletRequest request);
+    LoginVo login(NormalWayParam param, HttpServletRequest request,HttpServletResponse response);
+
+    void logout(HttpServletRequest request,HttpServletResponse response);
 }

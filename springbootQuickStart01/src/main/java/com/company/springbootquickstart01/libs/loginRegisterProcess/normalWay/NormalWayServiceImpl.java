@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
-import com.company.springbootquickstart01.codes.common.util.CookieUtil;
-import com.company.springbootquickstart01.codes.common.util.IPUtil;
-import com.company.springbootquickstart01.codes.common.util.JasypUtil;
-import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
+import com.company.springbootquickstart01.codes.common.util.*;
 import com.company.springbootquickstart01.codes.dao.UserDao;
 import com.company.springbootquickstart01.codes.entity.UserDo;
 import com.company.springbootquickstart01.libs.redis.RedisUtil;
@@ -27,7 +24,7 @@ public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implement
     private RedisUtil redisUtil;
 
     @Override
-    public LoginVo login(NormalWayParam param, HttpServletResponse response, HttpServletRequest request) {
+    public LoginVo login(NormalWayParam param, HttpServletRequest request, HttpServletResponse response) {
         //查询账户是否存在
         QueryWrapper<UserDo> qw = new QueryWrapper<>();
         qw.eq("account",param.getAccount());
@@ -46,12 +43,24 @@ public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implement
             String ip = "ip"+IPUtil.getIpAddr(request).replace(":","：");
             String token = uuid + ip;
             redisUtil.set("UserToken:"+token,loginVo,7*24*3600);
-            CookieUtil.addCookie(request, response, "user_uuid", uuid,
-                    7*24*3600, "localhost");//c2c-system.com
+            CookieUtil.addCookie(request, response, ConstantsUtil.UUID_COOKIE_NAME, uuid,
+                    7*24*3600, ConstantsUtil.COOKIE_DOMAIN);//c2c-system.com
             return loginVo;
         }else{
             throw new ServiceException("账号或密码不正确");
         }
+    }
+
+    @Override
+    public void logout(HttpServletRequest request,HttpServletResponse response) {
+        //清除redis
+        String uuid = CookieUtil.getCookieValue(request, ConstantsUtil.UUID_COOKIE_NAME);
+        String ip = "ip"+ IPUtil.getIpAddr(request).replace(":","：");
+        String token = uuid + ip;
+        redisUtil.del("UserToken:" + token);
+        //清除cookie，cookie过期时间设为0覆盖
+        CookieUtil.addCookie(request, response, ConstantsUtil.UUID_COOKIE_NAME, null,
+                0, ConstantsUtil.COOKIE_DOMAIN);
     }
 
     @Override

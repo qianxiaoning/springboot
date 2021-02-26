@@ -47,10 +47,10 @@ public class UserDo extends Model<UserDo> {
     private Date lastLoginTime;
 
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private Long createBy;
 
     @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
+    private Date createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;

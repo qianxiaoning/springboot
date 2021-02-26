@@ -24,7 +24,8 @@ public class TimeAllowedInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //在拦截器中获取其他bean
 //        System.out.println(redisUtil);
-        System.out.println("当前时间 " + new Date());
+//        System.out.println(request.getRequestURL());
+//        System.out.println("当前时间 " + new Date());
         //获取日历对象
         int startHour = 7;
         int endHour = 24;
