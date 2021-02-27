@@ -4,11 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
 import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
 import com.company.springbootquickstart01.codes.common.util.ThreadLocalUtil;
-import com.company.springbootquickstart01.codes.dao.UserDao;
-import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.mapper.UserMapper;
+import com.company.springbootquickstart01.codes.entity.User1;
 import com.company.springbootquickstart01.codes.param.UpdateUserParam;
 import com.company.springbootquickstart01.codes.service.UserService;
-import com.company.springbootquickstart01.codes.vo.UserVo;
 import com.company.springbootquickstart01.libs.loginRegisterProcess.normalWay.LoginVo;
 import com.company.springbootquickstart01.libs.redis.RedisUtil;
 import org.springframework.beans.BeanUtils;
@@ -16,15 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserDao, UserDo> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User1> implements UserService {
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
@@ -33,13 +28,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserDo> implements Use
     private RedisUtil redisUtil;
 
     @Override
-    public UserDo findUserById(Long id) {
+    public User1 findUserById(Long id) {
         if(id==null) {
             throw new IllegalArgumentException("id不能为空");
         }
-//        UserDo userDo = userDao.findUserById(id);
-        UserDo userDo = userDao.selectById(id);
-        if(userDo==null) {
+//        User user = UserMapper.findUserById(id);
+        User1 user = userMapper.selectById(id);
+        if(user ==null) {
             throw new ServiceException("用户不存在");
         }
         //redis测试
@@ -53,24 +48,24 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserDo> implements Use
 //        stringRedisTemplate.opsForValue().set("stringRedis","stringRedis");
 //        String stringRedis = stringRedisTemplate.opsForValue().get("stringRedis");
 //        System.out.println(stringRedis);
-//        redisTemplate.opsForValue().set("userDo",userDo);
-//        UserDo userDoRedis = (UserDo)redisTemplate.opsForValue().get("userDo");
-//        redisUtil.set("userDoRedisUtil",userDo);
-//        UserDo userDoRedisUtil = (UserDo) redisUtil.get("userDoRedisUtil");
+//        redisTemplate.opsForValue().set("user",user);
+//        User userRedis = (User)redisTemplate.opsForValue().get("user");
+//        redisUtil.set("userRedisUtil",user);
+//        User userRedisUtil = (User) redisUtil.get("userRedisUtil");
         //
-        return userDo;
+        return user;
     }
 
     @Override
     public void updateUser(UpdateUserParam param) {
-        UserDo userDo = baseMapper.selectById(param.getId());
-        if (userDo == null){
+        User1 user = baseMapper.selectById(param.getId());
+        if (user == null){
             throw new ServiceException("id不存在");
         }else{
-            BeanUtils.copyProperties(param, userDo);
+            BeanUtils.copyProperties(param, user);
             LoginVo userInfo = ThreadLocalUtil.get("userInfo");
-            UserDo entity = ServiceUtil.updateEntity(userDo, userInfo.getId());
-            userDao.updateById(entity);
+            User1 entity = ServiceUtil.updateEntity(user, userInfo.getId());
+            userMapper.updateById(entity);
         }
     }
 }

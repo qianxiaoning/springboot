@@ -5,18 +5,15 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 
 @Data
 @Accessors(chain = true)
 @TableName("user")
 @ApiModel(value="user对象", description="")
-public class UserDo extends Model<UserDo> {
+public class User1 extends Model<User1> {
 
     @ApiModelProperty(value = "id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)

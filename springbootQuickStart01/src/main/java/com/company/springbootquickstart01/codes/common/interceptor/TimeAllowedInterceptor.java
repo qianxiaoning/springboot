@@ -1,7 +1,6 @@
 package com.company.springbootquickstart01.codes.common.interceptor;
 
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
-import com.company.springbootquickstart01.codes.entity.UserDo;
 import com.company.springbootquickstart01.libs.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
-import java.util.Date;
 
 //允许访问时间
 @Component

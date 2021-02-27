@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
 import com.company.springbootquickstart01.codes.common.util.*;
-import com.company.springbootquickstart01.codes.dao.UserDao;
-import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.mapper.UserMapper;
+import com.company.springbootquickstart01.codes.entity.User1;
 import com.company.springbootquickstart01.libs.redis.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +17,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Service
-public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implements NormalWayService {
+public class NormalWayServiceImpl extends ServiceImpl<UserMapper, User1> implements NormalWayService {
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
     @Autowired
     private RedisUtil redisUtil;
 
     @Override
     public LoginVo login(NormalWayParam param, HttpServletRequest request, HttpServletResponse response) {
         //查询账户是否存在
-        QueryWrapper<UserDo> qw = new QueryWrapper<>();
+        QueryWrapper<User1> qw = new QueryWrapper<>();
         qw.eq("account",param.getAccount());
-        UserDo userDo = userDao.selectOne(qw);
-        if(userDo == null){
+        User1 user = userMapper.selectOne(qw);
+        if(user == null){
             throw new ServiceException("账号不存在");
         }
         //密码比较
-        String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
+        String password = JasypUtil.decryptWithSHA512(user.getPassword());
         if(password.equals(param.getPassword())){
             //成功登录
             LoginVo loginVo = new LoginVo();
-            BeanUtils.copyProperties(userDo, loginVo);
+            BeanUtils.copyProperties(user, loginVo);
             //uuid和用户ip生成token，将token与用户挂钩存入redis，uuid存入cookie
             String uuid = "uuid" + UUID.randomUUID().toString();
             String ip = "ip"+IPUtil.getIpAddr(request).replace(":","：");
@@ -66,21 +66,21 @@ public class NormalWayServiceImpl extends ServiceImpl<UserDao, UserDo> implement
     @Override
     public void register(NormalWayParam param) {
         //查询账号是否已存在
-        QueryWrapper<UserDo> qw = new QueryWrapper<>();
+        QueryWrapper<User1> qw = new QueryWrapper<>();
         qw.eq("account",param.getAccount());
-        UserDo userDo = userDao.selectOne(qw);
-        if(userDo != null){
+        User1 user = userMapper.selectOne(qw);
+        if(user != null){
             throw new ServiceException("账号已存在");
         }
         //创建账户
-        UserDo userDo1 = new UserDo();
+        User1 user1 = new User1();
         //密码加密
         param.setPassword(JasypUtil.encryptWithSHA512(param.getPassword()));
-        BeanUtils.copyProperties(param, userDo1);
+        BeanUtils.copyProperties(param, user1);
         //调用mybatisplus的雪花算法
-        Long id = IdWorker.getId(userDo1);
-        userDo1.setId(id);
-        UserDo entity = ServiceUtil.createEntity(userDo1, id);
-        userDao.insert(entity);
+        Long id = IdWorker.getId(user1);
+        user1.setId(id);
+        User1 entity = ServiceUtil.createEntity(user1, id);
+        userMapper.insert(entity);
     }
 }

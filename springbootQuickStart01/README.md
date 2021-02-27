@@ -69,13 +69,13 @@ String stringRedis = stringRedisTemplate.opsForValue().get("stringRedis");
 
 引入RedisUtil，libs.redis.RedisUtil工具类
 RedisUtil:
-redisUtil.set("userDoRedisUtil",userDo);
-UserDo userDoRedisUtil = (UserDo) redisUtil.get("userDoRedisUtil");
+redisUtil.set("userRedisUtil",user);
+User userRedisUtil = (User) redisUtil.get("userRedisUtil");
 redisUtil.hset("a", "a", "b");
 redisUtil.hget("a", "a");
-redisUtil.expire("userDoRedisUtil",1000);
-redisUtil.hasKey("userDoRedisUtil");
-redisUtil.del("userDoRedisUtil");
+redisUtil.expire("userRedisUtil",1000);
+redisUtil.hasKey("userRedisUtil");
+redisUtil.del("userRedisUtil");
 
 2 结合swagger
 2.1 pom.xml springfox-swagger2 springfox-swagger-ui
@@ -208,11 +208,11 @@ aop：
 8.1 密码加密保存 
 param.setPassword(JasypUtil.encryptWithSHA512(param.getPassword()));
 8.2 调用mybatisplus的雪花算法
-Long id = IdWorker.getId(userDo1);
+Long id = IdWorker.getId(user1);
 8.3 ServiceUtil.createEntity反射给实例设置属性值
 8.4 备选：mybatisPlus自动填充功能
 8.4.1 
-UserDo：注解填充字段
+User：注解填充字段
 @TableField(fill = FieldFill.INSERT)
 private Date createTime;
 @TableField(fill = FieldFill.INSERT_UPDATE)
@@ -222,7 +222,7 @@ private Date updateTime;
 
 9 普通登录
 9.1 数据库密码解密与参数密码比较
-String password = JasypUtil.decryptWithSHA512(userDo.getPassword());
+String password = JasypUtil.decryptWithSHA512(user.getPassword());
 password.equals(param.getPassword())
 9.2 成功登录则，
 uuid和用户ip生成token，

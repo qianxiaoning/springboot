@@ -1,26 +1,26 @@
 package com.company.springbootquickstart01.codes.common.listener.customListener;
 
-import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.entity.User1;
 import org.springframework.context.ApplicationEvent;
 
 //自定义事件
 public class AEvent extends ApplicationEvent {
-    private UserDo userDo;
+    private User1 user;
 
     public AEvent(Object source) {
         super(source);
     }
 
-    public AEvent(Object source, UserDo userDo) {
+    public AEvent(Object source, User1 user) {
         super(source);
-        this.userDo = userDo;
+        this.user = user;
     }
 
-    public UserDo getUserDo() {
-        return userDo;
+    public User1 getUser() {
+        return user;
     }
 
-    public void setUserDo(UserDo userDo) {
-        this.userDo = userDo;
+    public void setUser(User1 user) {
+        this.user = user;
     }
 }

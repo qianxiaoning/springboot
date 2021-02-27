@@ -1,6 +1,6 @@
 package com.company.springbootquickstart01.codes.common.listener.customListener;
 
-import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.entity.User1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,9 @@ public class ATrigger {
     private ApplicationContext applicationContext;
     //发布事件
     public void queryUser(){
-        UserDo userDo = new UserDo();
-        userDo.setAccount("aaa");
-        AEvent aEvent = new AEvent(this, userDo);
+        User1 user = new User1();
+        user.setAccount("aaa");
+        AEvent aEvent = new AEvent(this, user);
         applicationContext.publishEvent(aEvent);
     }
 }

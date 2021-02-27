@@ -1,12 +1,12 @@
 package com.company.springbootquickstart01.libs.loginRegisterProcess.normalWay;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.company.springbootquickstart01.codes.entity.UserDo;
+import com.company.springbootquickstart01.codes.entity.User1;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface NormalWayService extends IService<UserDo> {
+public interface NormalWayService extends IService<User1> {
 
     void register(NormalWayParam param);
 
