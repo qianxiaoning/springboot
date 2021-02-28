@@ -2,7 +2,7 @@ package com.company.springbootquickstart01.codes.controller;
 
 import com.company.springbootquickstart01.codes.common.annotation.InsertLog;
 import com.company.springbootquickstart01.codes.common.vo.JsonResult;
-import com.company.springbootquickstart01.codes.entity.User1;
+import com.company.springbootquickstart01.codes.entity.User;
 import com.company.springbootquickstart01.codes.param.UpdateUserParam;
 import com.company.springbootquickstart01.codes.service.UserService;
 import io.swagger.annotations.*;
@@ -21,8 +21,8 @@ public class UserController {
     @ApiOperation("根据id查找单个用户")
     @InsertLog("根据id查找单个用户")
     @ApiImplicitParam(name="id",value="用户id",required = true)
-    public JsonResult<User1> findUserById(Long id) {
-        User1 user = userService.findUserById(id);
+    public JsonResult<User> findUserById(Long id) {
+        User user = userService.findUserById(id);
         return new JsonResult(user);
     }
 

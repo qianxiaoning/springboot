@@ -2,13 +2,13 @@ package com.company.springbootquickstart01.test;
 
 import com.company.springbootquickstart01.codes.common.util.ConstantsUtil;
 import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
-import com.company.springbootquickstart01.codes.entity.User1;
+import com.company.springbootquickstart01.codes.entity.User;
 import org.junit.Test;
 
 public class SimpleTest {
     @Test
     public void test(){
-        User1 entity = ServiceUtil.createEntity(new User1(), 111l);
+        User entity = ServiceUtil.createEntity(new User(), 111l);
         System.out.println(1);
     }
     @Test

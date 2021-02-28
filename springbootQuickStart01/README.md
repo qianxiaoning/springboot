@@ -98,7 +98,6 @@ http://localhost:8000/swagger-ui.html
 service层 extends IService<Do>
 dao层 extends BaseMapper<Do>
 entity上： 
-@TableName("user")，
 @TableId(value = "id", type = IdType.ASSIGN_ID)//雪花算法自动生成id
 @TableLogic//表字段逻辑处理
 3.4 乐观锁，使用mybatisplus进行改删操作时触发，+1
@@ -108,6 +107,9 @@ entity上：
 在实体类字段上添加@Version注解 
 3.5 AutoGenerator代码生成器
 3.5.1 添加pom依赖mybatis-plus-generator、velocity-engine-core
+3.5.2 MybatisPlusCodeGenerator 代码生成器类
+3.5.3 输入tableNames
+3.5.4 执行main方法
 
 4 过滤器
 法1 @WebFilter法
@@ -208,7 +210,7 @@ aop：
 8.1 密码加密保存 
 param.setPassword(JasypUtil.encryptWithSHA512(param.getPassword()));
 8.2 调用mybatisplus的雪花算法
-Long id = IdWorker.getId(user1);
+Long id = IdWorker.getId(user);
 8.3 ServiceUtil.createEntity反射给实例设置属性值
 8.4 备选：mybatisPlus自动填充功能
 8.4.1 

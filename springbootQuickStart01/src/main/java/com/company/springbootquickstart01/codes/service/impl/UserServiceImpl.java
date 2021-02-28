@@ -5,7 +5,7 @@ import com.company.springbootquickstart01.codes.common.globalException.ServiceEx
 import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
 import com.company.springbootquickstart01.codes.common.util.ThreadLocalUtil;
 import com.company.springbootquickstart01.codes.mapper.UserMapper;
-import com.company.springbootquickstart01.codes.entity.User1;
+import com.company.springbootquickstart01.codes.entity.User;
 import com.company.springbootquickstart01.codes.param.UpdateUserParam;
 import com.company.springbootquickstart01.codes.service.UserService;
 import com.company.springbootquickstart01.libs.loginRegisterProcess.normalWay.LoginVo;
@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User1> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -28,12 +28,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User1> implements U
     private RedisUtil redisUtil;
 
     @Override
-    public User1 findUserById(Long id) {
+    public User findUserById(Long id) {
         if(id==null) {
             throw new IllegalArgumentException("id不能为空");
         }
 //        User user = UserMapper.findUserById(id);
-        User1 user = userMapper.selectById(id);
+        User user = userMapper.selectById(id);
         if(user ==null) {
             throw new ServiceException("用户不存在");
         }
@@ -58,13 +58,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User1> implements U
 
     @Override
     public void updateUser(UpdateUserParam param) {
-        User1 user = baseMapper.selectById(param.getId());
+        User user = baseMapper.selectById(param.getId());
         if (user == null){
             throw new ServiceException("id不存在");
         }else{
             BeanUtils.copyProperties(param, user);
             LoginVo userInfo = ThreadLocalUtil.get("userInfo");
-            User1 entity = ServiceUtil.updateEntity(user, userInfo.getId());
+            User entity = ServiceUtil.updateEntity(user, userInfo.getId());
             userMapper.updateById(entity);
         }
     }

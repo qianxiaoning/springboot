@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.company.springbootquickstart01.codes.common.globalException.ServiceException;
 import com.company.springbootquickstart01.codes.common.util.*;
 import com.company.springbootquickstart01.codes.mapper.UserMapper;
-import com.company.springbootquickstart01.codes.entity.User1;
+import com.company.springbootquickstart01.codes.entity.User;
 import com.company.springbootquickstart01.libs.redis.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Service
-public class NormalWayServiceImpl extends ServiceImpl<UserMapper, User1> implements NormalWayService {
+public class NormalWayServiceImpl extends ServiceImpl<UserMapper, User> implements NormalWayService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -26,9 +26,9 @@ public class NormalWayServiceImpl extends ServiceImpl<UserMapper, User1> impleme
     @Override
     public LoginVo login(NormalWayParam param, HttpServletRequest request, HttpServletResponse response) {
         //查询账户是否存在
-        QueryWrapper<User1> qw = new QueryWrapper<>();
+        QueryWrapper<User> qw = new QueryWrapper<>();
         qw.eq("account",param.getAccount());
-        User1 user = userMapper.selectOne(qw);
+        User user = userMapper.selectOne(qw);
         if(user == null){
             throw new ServiceException("账号不存在");
         }
@@ -66,21 +66,20 @@ public class NormalWayServiceImpl extends ServiceImpl<UserMapper, User1> impleme
     @Override
     public void register(NormalWayParam param) {
         //查询账号是否已存在
-        QueryWrapper<User1> qw = new QueryWrapper<>();
+        QueryWrapper<User> qw = new QueryWrapper<>();
         qw.eq("account",param.getAccount());
-        User1 user = userMapper.selectOne(qw);
+        //查询账户
+        User user = userMapper.selectOne(qw);
         if(user != null){
             throw new ServiceException("账号已存在");
         }
-        //创建账户
-        User1 user1 = new User1();
         //密码加密
         param.setPassword(JasypUtil.encryptWithSHA512(param.getPassword()));
-        BeanUtils.copyProperties(param, user1);
+        BeanUtils.copyProperties(param, user);
         //调用mybatisplus的雪花算法
-        Long id = IdWorker.getId(user1);
-        user1.setId(id);
-        User1 entity = ServiceUtil.createEntity(user1, id);
+        Long id = IdWorker.getId(user);
+        user.setId(id);
+        User entity = ServiceUtil.createEntity(user, id);
         userMapper.insert(entity);
     }
 }

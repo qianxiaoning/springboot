@@ -7,13 +7,15 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-@TableName("user")
-@ApiModel(value="user对象", description="")
-public class User1 extends Model<User1> {
+@ApiModel(value="User对象", description="用户表")
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -59,7 +61,7 @@ public class User1 extends Model<User1> {
 
     private Date delTime;
 
-    @ApiModelProperty(value = "0表示有效1表示无效")
+    @ApiModelProperty(value = "0有效1无效")
     @TableLogic
     private Integer delFlag;
 

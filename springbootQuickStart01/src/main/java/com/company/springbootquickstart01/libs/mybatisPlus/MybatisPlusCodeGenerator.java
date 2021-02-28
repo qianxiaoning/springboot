@@ -9,22 +9,21 @@ import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-// 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
+// 执行 main 方法生成代码
 public class MybatisPlusCodeGenerator {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/springboot_quickstart01?useUnicode=true&useSSL=false&characterEncoding=utf8";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/springboot_quickstart01?serverTimezone=GMT%2B8&useUnicode=true&useSSL=false&characterEncoding=utf8";
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_ACCOUNT = "root";
     private static final String DB_PASSWORD = "root";
-    private static final String PACKAGE_NAME = "com.company.springbootquickstart01";
+    private static final String PACKAGE_NAME = "com.company.springbootquickstart01.codes";
     private static String authorName = "Shon Qian";
-    private static String tableNames = "user";
+    //输入需要生成的表名，多张逗号隔开
+    private static String tableNames = "log";
 
     public static void main(String[] args) {
         // 代码生成器
@@ -35,27 +34,35 @@ public class MybatisPlusCodeGenerator {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor(authorName);
+        //生成后不打开资源管理器
         gc.setOpen(false);
-        gc.setSwagger2(true); //实体属性 Swagger2 注解
-        gc.setServiceName("%sService");//去掉I首字母
+        //开启 swagger2 模式，添加 Swagger2 注解
+        gc.setSwagger2(true);
+        //去掉service接口的I首字母
+        gc.setServiceName("%sService");
+        //指定生成的主键的ID类型
         gc.setIdType(IdType.ASSIGN_ID);
+        //xml生成BaseResultMap和BaseColumnList
+//        gc.setBaseResultMap(true);
+        gc.setBaseColumnList(true);
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/springboot_quickstart01?serverTimezone=GMT%2B8&useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl(DB_URL);
         // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
+        dsc.setDriverName(DB_DRIVER);
+        dsc.setUsername(DB_ACCOUNT);
+        dsc.setPassword(DB_PASSWORD);
         mpg.setDataSource(dsc);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
+        //不生成父包模块名
         pc.setModuleName(null);
-//        pc.setModuleName(scanner("模块名"));
-//        pc.setModuleName(tableNames[0]);
-        pc.setParent("com.company.springbootquickstart01.codes");
+        //pc.setModuleName(scanner("模块名"));
+        //父包名
+        pc.setParent(PACKAGE_NAME);
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -106,26 +113,38 @@ public class MybatisPlusCodeGenerator {
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
         templateConfig.setController("velocityTemplates/controller.java");
-        // templateConfig.setEntity("templates/entity2.java");
-        // templateConfig.setService();
-
-        templateConfig.setXml(null);
+//        templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
 
-        // 策略配置
+        //数据库表配置 策略配置
         StrategyConfig strategy = new StrategyConfig();
+        //数据库表映射到实体的命名策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
+        //数据库表字段映射到实体的命名策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+        //自定义继承的Entity类全称，带包名
 //        strategy.setSuperEntityClass("com.company.springbootquickstart01.codes.common.entity.BasePojo");
+        //是否为lombok模型
         strategy.setEntityLombokModel(true);
+        //生成 @RestController 控制器
         strategy.setRestControllerStyle(true);
         // 公共父类
 //        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
 //        strategy.setSuperEntityColumns("id");
+        //需要包含的表名
         strategy.setInclude(tableNames.split(","));
+        //驼峰转连字符
         strategy.setControllerMappingHyphenStyle(true);
+        //乐观锁属性名称
+        strategy.setVersionFieldName("version");
+        //逻辑删除属性名称
+        strategy.setLogicDeleteFieldName("del_flag");
+        //是否为链式模型
+        strategy.setChainModel(true);
+        //表前缀
         strategy.setTablePrefix(pc.getModuleName() + "_");//生成实体时去掉表前缀
+        //数据库表配置
         mpg.setStrategy(strategy);
 //        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.setTemplateEngine(new VelocityTemplateEngine());
