@@ -579,7 +579,7 @@ filters用于共性问题，如对所有post请求进行编码处理
 HandlerInterceptors对某一个controller控制
 aop反射机制创建代理对象，性能低一些
 
-HandlerInterceptors是基于回调机制，比aop快
+HandlerInterceptors是基于回调机制，比aop快？拦截器也是反射？
 
 数据层也有拦截器
 mybatis.Interceptor

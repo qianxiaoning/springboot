@@ -96,7 +96,7 @@ http://localhost:8000/swagger-ui.html
 3.2 yml
 3.3 逻辑代码层
 service层 extends IService<Do>
-dao层 extends BaseMapper<Do>
+mapper层 extends BaseMapper<Do>
 entity上： 
 @TableId(value = "id", type = IdType.ASSIGN_ID)//雪花算法自动生成id
 @TableLogic//表字段逻辑处理
@@ -178,7 +178,7 @@ Filter可以通过通配符对web服务器管理的所有web资源：例如Jsp�
 
 7.2 拦截器：
 拦截器基于反射，拦截器属于spring组件，不依赖servlet
-拦截器更细，在controller，service，dao层都可以使用拦截器，对该层进行拦截
+拦截器更细，在controller，service，mapper层都可以使用拦截器，对该层进行拦截
 拦截器能够深入到方法前后、异常抛出前后等
 
 拦截器，可以访问action上下文、值栈里的对象，而过滤器不能
@@ -247,14 +247,37 @@ CookieUtil.addCookie(request, response, "user_uuid",uuid,7*24*3600, ConstantsUti
 在serviceImpl的两条及以上改数据库操作的方法上，使用事务，
 添加@Transactional(rollbackFor = {Exception.class})注解
 
+12 日志记录注解aop
+12.1 添加InsertLog日志注解
+12.2 添加InsertLogAspect日志切面，定义切点（InsertLog注解方式），通知类型（aroundAdvice环绕通知），
+通过ProceedingJoinPoint连接点，反射获取日志需要的参数
+12.3 在需要的方法上添加@InsertLog("xxx")注解
 ```
 
 
 ---
 ```
 待整理：
-2.日志aop切面
-5.quartz
-7.mybatisplus
-8.httpClient
+图片上传封装MultipartFile
+@Slf4j 日志框架
+通过拦截器做权限（类似登录验证）
+权限框架
+quartz，@Scheduled定时器
+httpClient
+rocketMQ等队列
+websocket等连接
+异常代码类
+mybatisPlus分页插件
+yml插件环境区分
+dubbo+zookeeper
+shiro
+多线程编程
+
+其他表：
+角色表，菜单表，部门表，权限表，（用户角色多对多），（角色权限多对多）
+主表，码表，附件表，gis表
+
+后续补充：
+面试要求的技术
+网上看到的流行或新技术
 ```

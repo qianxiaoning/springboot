@@ -14,10 +14,10 @@ public class BeanTest {
     @Autowired
     private ATrigger aTrigger;
 //    @Autowired
-//    private LogsDao logsDao;
+//    private LogMapper logMapper;
 //    @Test
 //    public void testGetRowCount() {
-//        int rowCount = logsDao.getRowCount("sasa");
+//        int rowCount = logMapper.getRowCount("sasa");
 //        System.out.println(rowCount);
 //    }
     @Test

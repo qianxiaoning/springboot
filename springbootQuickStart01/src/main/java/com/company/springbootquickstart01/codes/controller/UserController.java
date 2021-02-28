@@ -28,6 +28,7 @@ public class UserController {
 
     @PutMapping("/updateUser")
     @ApiOperation("修改用户资料")
+    @InsertLog("修改用户资料")
     public JsonResult updateUser(@RequestBody UpdateUserParam param) {
         userService.updateUser(param);
         return new JsonResult("修改成功，请重新登录");
