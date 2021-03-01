@@ -299,7 +299,7 @@ shiro
 搜索服务框架Elasticsearch
 Kafka
 k8s
-DB2，MongoDB
+DB2，MongoDB,oracle
 MyCat
 Spring Security+CAS进行用户信息的认证和授权
 高并发访问
@@ -308,7 +308,7 @@ Spring Security+CAS进行用户信息的认证和授权
 
 其他表：
 角色表，菜单表，部门表，权限表，（用户角色多对多），（角色权限多对多）
-主表，码表，附件表，gis表
+主表，码表，gis表
 
 springcloud
 apollo注册中心
