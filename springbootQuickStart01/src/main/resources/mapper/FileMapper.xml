@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.springbootquickstart01.codes.mapper.FileMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, file_name, file_size, file_type, full_file_name, local_path, bucket_name, object_name, oss_file_path, oss_url, create_time, create_by, update_by, update_time, del_by, del_time, del_flag, version
+    </sql>
+
+</mapper>

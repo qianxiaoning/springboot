@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -43,23 +44,23 @@ public class User implements Serializable {
     private Integer userStatus;
 
     @ApiModelProperty(value = "最近登录时间")
-    private Date lastLoginTime;
+    private LocalDateTime lastLoginTime;
 
     @TableField(fill = FieldFill.INSERT)
     private Long createBy;
 
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     private Long delBy;
 
-    private Date delTime;
+    private LocalDateTime delTime;
 
     @ApiModelProperty(value = "0有效1无效")
     @TableLogic

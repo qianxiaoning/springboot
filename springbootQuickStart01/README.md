@@ -1,6 +1,6 @@
 ### springbootQuickStart01
 #### springboot脚手架01
-- 结构：
+- 结构：（未更新）
 ```
 codes 逻辑代码层：
  .common
@@ -40,6 +40,10 @@ test bean简单测试类：
 ---
 - 过程：
 ```
+大纲：
+redis,swagger,mybatisPlus,过滤器，拦截器,监听器,普通登录注册流程,
+登录验证拦截器,springboot事务,日志记录注解aop,MultipartFile对象文件上传
+
 1 结合redis
 1.1 centos安装redis
 重点部分：
@@ -252,32 +256,65 @@ CookieUtil.addCookie(request, response, "user_uuid",uuid,7*24*3600, ConstantsUti
 12.2 添加InsertLogAspect日志切面，定义切点（InsertLog注解方式），通知类型（aroundAdvice环绕通知），
 通过ProceedingJoinPoint连接点，反射获取日志需要的参数
 12.3 在需要的方法上添加@InsertLog("xxx")注解
+
+13 MultipartFile对象文件上传
+13.1 FileServiceImpl.uploadFiles上传多张图片，多次入库，加上事务
+@Transactional(rollbackFor = {Exception.class})
+13.2 FileVo.createTime时间上加上@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")注解
+yml配置jackson
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+@DateTimeFormat(pattern = "yyyy-MM-dd") //入参时间格式化
+@JsonFormat(pattern = "yyyy-MM-dd") //出参时间格式化
+
+MultipartFile文件输出代码：
+String path = "D:/qxn/file/testFileFolder/"+fileName;
+File fileObject = new File(path);
+fileOrigin.transferTo(fileObject);
 ```
 
 
 ---
 ```
 待整理：
-图片上传封装MultipartFile
 @Slf4j 日志框架
 通过拦截器做权限（类似登录验证）
 权限框架
-quartz，@Scheduled定时器
+springboot定时器实现方式：quartz，@Scheduled 
 httpClient
 rocketMQ等队列
 websocket等连接
+netty nio框架
+消息推送模块:使用netty+websocke+rabbitmq完成消息的推送
+socket
 异常代码类
 mybatisPlus分页插件
 yml插件环境区分
 dubbo+zookeeper
 shiro
 多线程编程
+设计模式
+搜索服务框架Elasticsearch
+Kafka
+k8s
+DB2，MongoDB
+MyCat
+Spring Security+CAS进行用户信息的认证和授权
+高并发访问
+设计微服务架构满足高并发和高可用架构，高峰QPS/TPS 达8000+，满足高吞吐量和低延迟要求
+于euraka和hystrix已经闭源，后续升级技术选型为 spring cloud-alibaba技术体系
 
 其他表：
 角色表，菜单表，部门表，权限表，（用户角色多对多），（角色权限多对多）
 主表，码表，附件表，gis表
 
+springcloud
+apollo注册中心
+
 后续补充：
+学习补充其他后端需要框架
 面试要求的技术
-网上看到的流行或新技术
+网上看到的流行的新技术
 ```

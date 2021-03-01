@@ -14,7 +14,7 @@ import io.swagger.annotations.Api;
  */
 @RestController
 @Api(tags = "未分类接口")
-@RequestMapping("/api/Log")
+@RequestMapping("/api/log")
 public class LogController {
     @Autowired
     private LogService logService;

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 #end
 @Api(tags = "未分类接口")
-@RequestMapping("/api/${table.entityName}")
+@RequestMapping("/api/${table.entityName.toLowerCase()}")
 public class ${table.controllerName} {
     @Autowired
     private ${table.serviceName} $table.entityName.substring(0,1).toLowerCase()$table.entityName.substring(1)Service;

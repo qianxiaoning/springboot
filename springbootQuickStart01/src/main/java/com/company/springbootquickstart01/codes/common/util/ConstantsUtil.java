@@ -4,6 +4,8 @@ package com.company.springbootquickstart01.codes.common.util;
 public interface ConstantsUtil {
     String UUID_COOKIE_NAME = "user_uuid";
     String COOKIE_DOMAIN = "localhost";
+    String LOCAL_DIR_PATH = "D:/qxn/file/testFileFolder/";
+    String URL_DIR_PATH = "http://image.c2c-system.com/";
 
     //用静态枚举分模块
     //性别

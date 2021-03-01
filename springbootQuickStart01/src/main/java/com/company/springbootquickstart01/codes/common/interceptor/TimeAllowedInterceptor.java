@@ -23,7 +23,7 @@ public class TimeAllowedInterceptor implements HandlerInterceptor {
         //在拦截器中获取其他bean
 //        System.out.println(redisUtil);
 //        System.out.println(request.getRequestURL());
-//        System.out.println("当前时间 " + new Date());
+//        System.out.println("当前时间 " + LocalDateTime.now());
         //获取日历对象
         int startHour = 7;
         int endHour = 24;

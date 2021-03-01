@@ -23,7 +23,7 @@ public class MybatisPlusCodeGenerator {
     private static final String PACKAGE_NAME = "com.company.springbootquickstart01.codes";
     private static String authorName = "Shon Qian";
     //输入需要生成的表名，多张逗号隔开
-    private static String tableNames = "log";
+    private static String tableNames = "file";
 
     public static void main(String[] args) {
         // 代码生成器

@@ -1,6 +1,7 @@
 package com.company.springbootquickstart01.codes.common.util;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ServiceUtil {
@@ -20,7 +21,7 @@ public class ServiceUtil {
             updateTime.setAccessible(true);
             updateBy.setAccessible(true);
             //给指定属性赋值
-            Date date = new Date();
+            LocalDateTime date = LocalDateTime.now();
             createTime.set(entity,date);
             createBy.set(entity,userId);
             updateTime.set(entity,date);
@@ -42,7 +43,7 @@ public class ServiceUtil {
             updateTime.setAccessible(true);
             updateBy.setAccessible(true);
             //给指定属性赋值
-            Date date = new Date();
+            LocalDateTime date = LocalDateTime.now();
             updateTime.set(entity,date);
             updateBy.set(entity,userId);
         } catch (Exception e) {
@@ -62,7 +63,7 @@ public class ServiceUtil {
             delTime.setAccessible(true);
             delBy.setAccessible(true);
             //给指定属性赋值
-            Date date = new Date();
+            LocalDateTime date = LocalDateTime.now();
             delTime.set(entity,date);
             delBy.set(entity,userId);
         } catch (Exception e) {

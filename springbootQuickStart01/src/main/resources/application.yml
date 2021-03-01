@@ -25,6 +25,9 @@ spring:
     port: 6379
     password: root
     timeout: 3000
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
 #mybatis-plus配置
 mybatis-plus:
   type-aliases-package: com.company.springbootquickstart01.codes.entity
