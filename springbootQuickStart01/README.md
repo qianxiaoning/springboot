@@ -284,7 +284,7 @@ fileOrigin.transferTo(fileObject);
 权限框架
 springboot定时器实现方式：quartz，@Scheduled 
 httpClient
-rocketMQ等队列
+ActiveMQ,rocketMQ等队列
 websocket等连接
 netty nio框架
 消息推送模块:使用netty+websocke+rabbitmq完成消息的推送
@@ -317,4 +317,6 @@ apollo注册中心
 学习补充其他后端需要框架
 面试要求的技术
 网上看到的流行的新技术
+
+centos gitlab cicd
 ```
