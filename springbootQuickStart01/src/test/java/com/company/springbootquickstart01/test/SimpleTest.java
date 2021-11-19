@@ -3,10 +3,12 @@ package com.company.springbootquickstart01.test;
 import com.company.springbootquickstart01.codes.common.util.ConstantsUtil;
 import com.company.springbootquickstart01.codes.common.util.ServiceUtil;
 import com.company.springbootquickstart01.codes.entity.User;
+import com.company.springbootquickstart01.codes.vo.UserVo;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SimpleTest {
 
@@ -27,40 +29,13 @@ public class SimpleTest {
 
     @Test
     public void test2() {
-        int[] x = {1,2};
-        for (int i = 0; i < x.length; i++) {
-            System.out.println(i);
-        }
+        a(1);
+    }
 
-        ArrayList<Map> aa = new ArrayList<>();
-        Map<String, Object> a = new HashMap<>();
-        a.put("id", 1);
-        a.put("a", 1);
-        aa.add(a);
-        Map<String, Object> b = new HashMap<>();
-        b.put("id", 1);
-        b.put("b", 2);
-        aa.add(b);
-        Map<String, Object> c = new HashMap<>();
-        c.put("id", 1);
-        c.put("c", 3);
-        aa.add(c);
-        a.putAll(b);
-        a.putAll(c);
-
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
-
-        int i = 0;
-        for (Map o : aa) {
-            o.put("idd", a.remove("id"));
-            System.out.println(o.get("idd"));
-            i++;
-        }
-
-
-//        a.put("idd", a.remove("id"));
-        System.out.println(a);
+    private void a(int i){
+        System.out.println(i);
+        i = i + 1;
+        System.out.println(i);
+        System.out.println(i);
     }
 }

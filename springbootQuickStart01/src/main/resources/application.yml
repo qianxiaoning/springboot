@@ -20,10 +20,12 @@ spring:
     password: root
   #redis
   redis:
-    database: 0
-    host: 192.168.137.128
+#    database: 0
+    database: 6
+#    host: 192.168.137.128
+    host: 192.168.20.237
     port: 6379
-    password: root
+#    password: root
     timeout: 3000
   jackson:
     time-zone: GMT+8
