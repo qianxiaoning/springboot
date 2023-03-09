@@ -3,6 +3,8 @@ package com.company.springbootquickstart01.springBootTest;
 import com.company.springbootquickstart01.codes.common.entity.BasePojo;
 import com.company.springbootquickstart01.codes.common.listener.customListener.ATrigger;
 import com.company.springbootquickstart01.codes.common.util.JasypUtil;
+import com.company.springbootquickstart01.springBootTest.cal.CalFactory;
+import com.company.springbootquickstart01.springBootTest.cal.Function;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,6 +25,8 @@ public class BeanTest {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private RedisOperate redisOperate;
+    @Autowired
+    private CalFactory calFactory;
 //    @Autowired
 //    private LogMapper logMapper;
 //    @Test
@@ -63,5 +66,19 @@ public class BeanTest {
 //        redisOperate.get(Arrays.asList(redisOperate.get("a")));
 //        redisOperate.lrem("a",1, redisOperate.lrange("a",0,0,Date.class).get(0).getTime());
 //        System.out.println(1);
+    }
+    @Test
+    public void test4() {
+//        Long[] longs = {320l, 321l};
+//        ArrayList<Long> longs1 = new ArrayList<>();
+//        longs1.add(320l);
+//        longs1.add(321l);
+//        String sql = "select * from log where id in(...longs)";
+//        System.out.println(sql);
+//        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+//        System.out.println(maps);
+//        CalFactory calFactory = new CalFactory();
+        Function func = calFactory.get("add");
+        BigDecimal value = func.calc(null);
     }
 }
