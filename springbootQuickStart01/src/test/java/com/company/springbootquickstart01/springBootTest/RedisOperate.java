@@ -24,15 +24,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 版权：(C) 版权所有 2000-2014 上海天好电子商务有限公司苏州分公司
- * <简述> Redis数据操作类
- * <详细描述>
- * @author   lilin
- * @version  $Id$
- * @since
- * @see
- */
 @Repository
 public class RedisOperate {
 
